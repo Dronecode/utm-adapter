@@ -1,11 +1,11 @@
 # QGCS UTM Adapter Project
 ## Goal
-The goal of this work is to develop a UTM focused working group within Dronecode membership and build an open / configurable adapter for QGCS to enable it to exchange relevant data a UTM system. The adapter would be configurable so that the operator can specify what UTM system it wants to use. The UTM system in turn must implement those APIs to exchange data with QGCS. 
+The goal of this work is to develop a UTM focused working group within Dronecode membership and build an open / configurable adapter for QGCS to enable it to exchange relevant data with a UTM system. The adapter would be configurable so that drone operators can specify what UTM system/service provider they want to use. The UTM system in turn must implement those APIs to exchange data with QGCS. 
 ## Scope
 
 ![Screenshot](images/net-rid.jpg)
 
-Figure: Image depicting the scope of ASTM Network RID standard, the part in Red: the way operators submit data to the UTM system is not standardized and we hope to build an API specification and a configurable implementation for that as well as other relevant data (flight authorizations, geozones, conformance alerts etc.). 
+Figure: Image depicting the scope of ASTM Network RID standard, the part in Red: the way operators submit data to the UTM system is not standardized and we hope to build an API specification and a configurable implementation for network identification as well as other relevant data (flight authorizations, traffic information, geozones, conformance alerts etc.). 
 
 ## Deliverables
 
