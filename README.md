@@ -22,11 +22,4 @@ Figure: Image depicting the scope of ASTM Network RID standard, the part in Red:
 
 - :calendar: Bi-Weekly Meeting Thursdays 4:30 PM CET | 7:30 AM PT
 - :link: Meeting Link: https://discord.gg/smTaq2rRVt
-
-### June 8, 2023
-**Meeting Minutes**
-Hey folks, welcome to the workgroup’s first meeting; we are kicking off with an overview of the project and a goal alignment meeting.
-
-Goal Discussion: The team agrees the main goal for the project is to build an open-source configurable adapter for QGC that can submit telemetry to participating UTM providers.
-
-Next Steps: We are putting together data requirements for the interfaces and discussing before the meeting. The data will be distributed before the meeting starts.
+- [Notes](meeting-minutes.md)
