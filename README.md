@@ -17,3 +17,9 @@ Figure: Image depicting the scope of ASTM Network RID standard, the part in Red:
 ## Timeline
 - Start date: 31 May 2023 -  30 November 2023 (6 months)
 - Evaluation phase: December + January 2023 / re-work
+
+## Meetings
+
+- :calendar: Bi-Weekly Meeting Thursdays 4:30 PM CET | 7:30 AM PT
+- :link: Meeting Link: https://discord.gg/smTaq2rRVt
+- [Notes](meeting-minutes.md)
