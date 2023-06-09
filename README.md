@@ -22,4 +22,3 @@ Figure: Image depicting the scope of ASTM Network RID standard, the part in Red:
 
 - :calendar: Bi-Weekly Meeting Thursdays 4:30 PM CET | 7:30 AM PT [Meeting Minutes](meeting-minutes.md)
 - :link: Meeting Link: https://discord.gg/smTaq2rRVt
-- 
