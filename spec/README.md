@@ -6,6 +6,8 @@ This document details at a high level the requirements for the UTM adapter
 ## Eco-system 
 UTM services or U-space services as it is called in the EU are a set of digital services to enable safe integration of drones with manned aviation that are regulated and will be verified and certified in the EU. Automated verification of the ability to conform to UTM standards forms a part of the UTM Service provider (USSP) certification framework. 
 
+The EU U-space law builds a regulatory framework for UTM, it is expected that other jurisdictions will have their own version of UTM regulations, while this work at this time (June 2023) is focused on the EU, it is not limited to it. It is expected that the codebase will change as other jurisdictions will build a regulatory / legal framework for integrating drones in the airspace and enabling "advanced" operations like BVLOS etc. 
+
 ### UTM Standards 
 The [EU U-Space law](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32021R0664) and the associated [acceptable means of compliance (AMC) and guidance material (GM)](https://www.easa.europa.eu/en/document-library/acceptable-means-of-compliance-and-guidance-materials/amc-and-gm-implementing) has been published. 
 - [Network Remote ID](https://www.astm.org/f3411-22a.html): Mentioned in the AMC/GM document as a acceptable way to comply to Net-RID. This standard specifies interfaces to ensure that 
