@@ -1,6 +1,6 @@
 ### UTM Adapter Specification
 
-This document details at a high level the requirements for the UTM adapter 
+This document details at a high level the requirements for a UTM adapter that will be integrated in QGCS.
 ## Scope of work 
 
 ## Eco-system 
