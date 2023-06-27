@@ -12,7 +12,7 @@ We discussed the need for QGC to understand when it's ONLINE or OFFLINE because 
 
 Additionally, the operator needs feedback from the USSP service and should always know what's going on with the system.
 
-The five services listed in the document are the REQUIRED services for an operation at the USSP/UTM level
+The five services listed in the document are the REQUIRED services for an operation at the USSP/UTM level (per the EU U-Space regulation).
 
 TODO: help create a config file
 TODO: distribute meeting minutes 
