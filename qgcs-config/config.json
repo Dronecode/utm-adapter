@@ -3,17 +3,18 @@
     "utmsp_logo_url": "https://utmsp.com/logo.png",
     "utmsp_support_url": "https://utmsp.com/support",
     "utmsp_documentation": "https://utmsp.com/documentation",
+    "base_url":"https://utmsp.com/",
     "available_services": [
         {
             "flight_authorization": {
                 "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"],
-                "authorization_request_url":"https://utmsp.com/qgcs/flight_authorization"
+                "request_url":"qgcs/flight_authorization"
             }
         },
         {
             "network_remote_id": {
                 "capabilties":["ASTMRID2019","ASTMRID2022"],                
-                "network_rid_telemetry_submit":"https://utmsp.com/qgcs/submit_telemetry"
+                "telemetry_submit_url":"qgcs/submit_telemetry"
             }
         }
     ]
