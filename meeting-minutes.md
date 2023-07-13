@@ -2,9 +2,9 @@
 This document captures the bi-weekly meeting notes for coordination purposes.
 
 ### July 6, 2023
-In today's meeting, we discussed @hrishiballal proposal for a QGC interface that can read the capabilities of a UTM provider and successfully use their services; the proposal also includes a reference from the USSP-API side. The idea is to focus on two services and define the groundwork needed to make them work, with the idea of adding the rest of the required services once things stabilize and are standardized. The two primary services are Flight Authorization and Network Remote ID.
+In today's meeting, we discussed @hrishiballal proposal for a QGC configuration file. At this stage the file specifies how QGC can read the capabilities of a UTM provider and successfully use their services; the proposal also includes a API that a participating USSP can implement to be compatible with QGCS Adapter. Currently the WG is focusing on two services: Flight Authorization and Network Remote ID and define the groundwork needed to make them work, with the idea of adding the rest of the required services once things stabilize and are standardized. The two primary services are Flight Authorization and Network Remote ID.
 
-**NOTE**: the group considers out of scope how QGC knows of the config.json files; we expect to resolve this in future discussions; some ideas are having previous knowledge at build-time or having a way to load at runtime.
+**NOTE**: the group considers out of scope how QGC knows of the product.json files; we expect to resolve this in future discussions; some ideas are having previous knowledge at build-time or having a way to load at runtime.
 
 **TODO**: The proposal is a first draft, and we are looking for feedback from everyone; please submit a review of the pull request by July 13th to allow for a discussion before our next meeting https://github.com/Dronecode/utm-adapater/pull/5
 
