@@ -1,4 +1,4 @@
-## QGCS Config file
+## QGCS Config file (product.json)
 
 This directory contains the configuration detail for UTM adapter in QGCS
 
@@ -18,3 +18,5 @@ The capabilities of [Flight Authorization](https://github.com/interuss/automated
 - `BasicStrategicConflictDetection`: USS supports strategic conflict detection for typical flights, including future planning (Accepted
 operational intents), activation (Accepted operational intents), and closing (deleting the operational intent reference).
 - `HighPriorityFlights`: USS supports flights at priority levels higher than typical flights.
+
+### Network Remote ID
