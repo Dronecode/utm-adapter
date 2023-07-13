@@ -50,13 +50,13 @@ paths:
       summary: RID capabilities 
       description: Retrieve the capabilities of the USS
       tags:
-        - rid
+        - flight_authorization
 
   /qgcs/network_remote_id/capabilities: 
     get:
       security:
       - AuthFromPassport:
-          - blender.read
+          - 'qgcs.utm_adapter.read'
       responses:
         '200':
           content:
@@ -72,8 +72,7 @@ paths:
       summary: RID capabilities 
       description: Retrieve the capabilities of the USS
       tags:
-        - rid
-
+        - network_remote_id
                 
 components:
   securitySchemes:
@@ -94,8 +93,8 @@ components:
         clientCredentials:
           tokenUrl: 'http://id.openskies.sh/oauth/token'
           scopes:
-            blender.write: 'Write data into UTM Adapter'
-            blender.read: 'Read data into UTM Adapter'
+            qgcs.utm_adapter.write: 'Write data into UTM Adapter'
+            qgcs.utm_adapter.read: 'Read data into UTM Adapter'
 
   schemas: 
 
@@ -141,7 +140,7 @@ components:
     RIDCapability:
       type: string
       description: >-
-        Capability of a USS.
+        Network Remote ID Capability of a USS.
 
           `ASTMRID2019`: USS supports Remote ID as defined in ASTM Remote ID standard that was released in 2019.
 
