@@ -17,7 +17,7 @@ The [EU U-Space law](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3
 - [Surveillance UTM Supplemental Data Service Provider (SDSP)](https://www.astm.org/workitem-wk69690) Specification for performance of supplemental data for UTM services. 
 
 ### Services with no / lack of standards
-- Traffic information service: A service that shares air-traffic information via an API, normally this is hosted by a Air-Navigation Service provider (ANSP) or the standards allow for a special types of "Supplemental Data Service Providers"
+- Traffic information service: A service that shares crewed air-traffic information via an API, normally this is hosted by a Air-Navigation Service provider (ANSP) or the standards allow for a special types of "Supplemental Data Service Providers". For un-crewed traffic information the Network Remote ID standard provides for "Service Provider" and "Display Provider" mechanisms that can be used for displaying Net-RID information. 
 - Common information service: A server that hosts and shares ED-269 Geozones and other information, currently there is no standard for it and this server will normally be expected to be hosted by an ANSP and / or an authority. 
 
 ## Core modules

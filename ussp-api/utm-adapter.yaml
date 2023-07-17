@@ -1,0 +1,160 @@
+---
+openapi: '3.0.0'
+info:
+  title: 'QGCS UTM Adapter API specification'
+  description: |-
+    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. Join 
+    
+    Unless otherwise specified, fields specified in a message but not declared in the API shall be ignored.
+  version: '1.0.0'
+servers:
+  - url: 'https://virtserver.swaggerhub.com/cygnus2936/flight-blender/1.0.0'
+    description: 'Flight Blender API'
+security:
+  - AuthFromPassport:
+      - 'qgcs.utm_adapter.write'
+      - 'qgcs.utm_adapter.read'
+paths:
+  /qgcs/ping:
+    get:
+      summary: 'Server heartbeat operation'
+
+      description: 'This operation is a ping to check if the server is running'
+
+      security: []
+      responses:
+        '200':
+          description: 'Server running normally'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PongResponse'
+
+  /qgcs/flight_authorization/capabilities: 
+    get:
+      security:
+      - AuthFromPassport:
+          - 'qgcs.utm_adapter.read'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightAuthorizationCapabilitiesResponse'
+          description: >-
+            The self-declared capabilities if the UTM Service Provider as far as support for Flight Authorization (or often times called Strategic Deconfliction) is concerned. This endpoint is supports definitions and capabilities as defined in the EU U-Space regulations.
+        '401':
+          description: Bearer access token was not provided in Authorization header, token could not be decoded, or token was invalid.
+        '403':
+          description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
+      summary: Flight Authorization capabilities 
+      description: Retrieve the capabilities of the USS
+      tags:
+        - flight_authorization
+
+  /qgcs/network_remote_id/capabilities: 
+    get:
+      security:
+      - AuthFromPassport:
+          - 'qgcs.utm_adapter.read'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RIDCapabilitiesResponse'
+          description: >-
+            The capabilities of the UTM Service Provider as far as support of ASTM RID standard for Network Remote ID data exchange is concerned. 
+        '401':
+          description: Bearer access token was not provided in Authorization header, token could not be decoded, or token was invalid.
+        '403':
+          description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
+      summary: RID capabilities 
+      description: Retrieve the capabilities of the USS
+      tags:
+        - network_remote_id
+                
+components:
+  securitySchemes:
+    AuthFromPassport:
+      type: oauth2
+      description: |-
+        UTM Adapter utilizes JWT tokens issued by a OAUTH server. This can be configured as an environment varaible. In this case we recommend using / deploying a Authorization Server: e.g. Flight Passport. For more information see https://id.openskies.sh
+
+        Authorization from, or on behalf of, an authorization authority.  This authority shall issue access tokens that are JSON Web Tokens as defined in RFC 7519, using the `RS256` algorithm for the signature, and publish to all providers the public key for verifying that signature.
+        The following fields shall be included in the JWT claim for access tokens issued by this authority:
+        * `iss`, with the URL at which the token generation request was received.
+        * `exp`, with a time no further than 1 hour in the future.
+        * `sub`, with unique ID of the client requesting the access token.
+        * `scope`, with an array of strings indicating the scopes granted.
+        Multiple scopes for a single token shall be granted if requested.  The tokens granted by this authority shall protect against reuse of received tokens to impersonate the sender to other recipients (via use of the `aud` claim or other means).
+        Clients shall provide these access tokens in an `Authorization` header in the form `Bearer <token>` in accordance with RFC 6750.
+      flows:
+        clientCredentials:
+          tokenUrl: 'http://id.openskies.sh/oauth/token'
+          scopes:
+            qgcs.utm_adapter.write: 'Write data into UTM Adapter'
+            qgcs.utm_adapter.read: 'Read data into UTM Adapter'
+
+  schemas: 
+
+    PongResponse:
+      description: The server is running properly
+      $ref: '#/components/schemas/Pong'
+
+
+    Pong:
+      properties:
+        message:
+          type: string
+          example: Server running properly
+
+
+    FlightAuthorizationCapability:
+      type: string
+      description: >-
+        Capability of a USS.
+          `FlightAuthorisationValidation`: USS supports EU flight authorisation
+            parameter validation.
+          `BasicStrategicConflictDetection`: USS supports strategic conflict
+            detection for typical flights, including future planning (Accepted
+            operational intents), activation (Accepted operational intents), and
+            closing (deleting the operational intent reference).
+          `HighPriorityFlights`: USS supports flights at priority levels higher
+            than typical flights.
+      enum:
+      - FlightAuthorisationValidation
+      - BasicStrategicConflictDetection
+      - HighPriorityFlights
+
+    FlightAuthorizationCapabilitiesResponse:
+      type: object
+      properties:
+        capabilities:
+          type: array
+          description: Set of capabilities supported by this USS.
+          items:
+            $ref: '#/components/schemas/FlightAuthorizationCapability'
+          default: []
+
+    RIDCapability:
+      type: string
+      description: >-
+        Network Remote ID Capability of a USS.
+
+          `ASTMRID2019`: USS supports Remote ID as defined in ASTM Remote ID standard that was released in 2019.
+
+          `ASTMRID2022`: USS supports Remote ID as defined in ASTM Remote ID standard that was released in 2022.
+
+      enum:
+      - ASTMRID2019
+      - ASTMRID2022
+    RIDCapabilitiesResponse:
+      type: object
+      properties:
+        capabilities:
+          type: array
+          description: Set of capabilities supported by this USS.
+          items:
+            $ref: '#/components/schemas/RIDCapability'
+          default: []
