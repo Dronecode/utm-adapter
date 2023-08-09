@@ -79,8 +79,8 @@ paths:
     get:
       summary: 'Get a list of all submitted flight declarations'
       security:
-        - AuthFromPassport: [blender.read]
-      description: "Get a list of all Flight declarations in the database, if no start or end date is provided, Blender will provide declarations for today"
+        - AuthFromPassport: [ussp.read]
+      description: "Get a list of all Flight declarations in the database, if no start or end date is provided, the USSP will provide declarations for today"
 
       parameters:
         - name: view
@@ -486,7 +486,7 @@ components:
           type: string
           format: date-time
         flight_declaration_geojson:
-          description: The operational intent for this flight declaration as a GeoJSON FeatureCollection
+          description: The operational intent for this flight declaration as a GeoJSON FeatureCollection, a operational intent is internally used by the USSP to exchange flight plan informatin with systems like InterUSS
           type: object
           properties: 
             type:
@@ -497,7 +497,7 @@ components:
               items:
                 $ref: '#/components/schemas/FlightDeclarationFeatureGeoJSON'
         flight_declaration_raw_geojson:
-          description: The raw / original Flight Plan as GeoJSON
+          description: The raw / original Flight Plan as GeoJSON as retrieved from QGCS
           type: object
           properties: 
             type:
@@ -508,7 +508,7 @@ components:
               items:
                 $ref: '#/components/schemas/FlightDeclarationFeatureGeoJSON'
         operational_intent:
-          description: The operational intent for this flight declaration, a raw flight plan is converted to an operational intent which can be in turn submitted to a DSS
+          description: The operational intent for this flight declaration, a raw flight plan is converted to an operational intent which can be in turn submitted to a DSS (e.g see the InterUSS project within Linux Foundation)
           $ref: '#/components/schemas/OperationalIntentDetails'
             
         state:
