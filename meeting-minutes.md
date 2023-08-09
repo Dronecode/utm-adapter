@@ -1,6 +1,13 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+### August 3, 2023
+Team, today we reviewed @hrishiballal [proposed services](https://github.com/Dronecode/utm-adapater/pull/7) for Flight Authorization and Network Remote ID. Thanks to everyone who joined the call and gave feedback on the call.
+
+* [Service Proposal](https://github.com/Dronecode/utm-adapater/pull/7)
+* **TODO:** To all members of the WG, please review the Pull Request and leave feedback directly on GitHub. We are looking for scrutiny in every field and service.
+* **TODO:**: @mrpollo will reach out to the MAVLink team to discuss how to integrate a mission authorization identifier into the mission micro-service 
+
 ### July 6, 2023
 In today's meeting, we discussed @hrishiballal proposal for a QGC configuration file. At this stage the file specifies how QGC can read the capabilities of a UTM provider and successfully use their services; the proposal also includes a API that a participating USSP can implement to be compatible with QGCS Adapter. Currently the WG is focusing on two services: Flight Authorization and Network Remote ID and define the groundwork needed to make them work, with the idea of adding the rest of the required services once things stabilize and are standardized. The two primary services are Flight Authorization and Network Remote ID.
 
