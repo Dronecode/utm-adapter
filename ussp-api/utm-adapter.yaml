@@ -3,13 +3,17 @@ openapi: '3.0.0'
 info:
   title: 'QGCS UTM Adapter API specification'
   description: |-
-    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. Join 
+    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. 
+
+    Glossary: 
+
+    `USSP`: A unmanned traffic management services provider, a company that provides UTM services.
     
     Unless otherwise specified, fields specified in a message but not declared in the API shall be ignored.
   version: '1.0.0'
 servers:
-  - url: 'https://virtserver.swaggerhub.com/cygnus2936/flight-blender/1.0.0'
-    description: 'Flight Blender API'
+  - url: 'https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Dronecode/utm-adapater/main/ussp-api/utm-adapter.yaml'
+    description: 'USSP QGCS API'
 security:
   - AuthFromPassport:
       - 'qgcs.utm_adapter.write'
@@ -48,7 +52,7 @@ paths:
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
       summary: Flight Authorization capabilities 
-      description: Retrieve the capabilities of the USS
+      description: Retrieve the capabilities of the USS for authorizing flights
       tags:
         - flight-authorization
 
@@ -70,7 +74,7 @@ paths:
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
       summary: RID capabilities 
-      description: Retrieve the capabilities of the USS
+      description: Retrieve the capabilities of the USS for network remote id
       tags:
         - network_remote_id
 
@@ -143,7 +147,7 @@ paths:
       description: "Submit a Flight Declaration into the QGCS Adapter. \
         \ A flight declaration can be added upto 24 hours in advance as GeoJSON."
       security:
-        - AuthFromPassport: [blender.write]
+        - AuthFromPassport: [ussp.write]
 
       requestBody:
         required: true
@@ -209,8 +213,8 @@ components:
         clientCredentials:
           tokenUrl: 'http://id.openskies.sh/oauth/token'
           scopes:
-            qgcs.utm_adapter.write: 'Write data into UTM Adapter'
-            qgcs.utm_adapter.read: 'Read data into UTM Adapter'
+            qgcs.utm_adapter.write: 'Write data to USSP via UTM Adapter'
+            qgcs.utm_adapter.read: 'Read data from USSP via UTM Adapter'
 
   schemas: 
 
@@ -282,19 +286,17 @@ components:
           enum:
           - 1
           - 2
-          - 3
           type: integer
           description: >
             Set the activity type and the airspace
              * `1` - VLOS
              * `2` - BVLOS
-             * `3` - CREWED
         submitted_by:
           description: Email address of person submitting this declaration
           type: string
           format: email
-        originating_party:
-          description: Set the name of the flight declaration
+        operator_id:
+          description: Set the id of the operator operating this flight.
           type: string
           example: Flight 1023
         start_datetime:
@@ -416,12 +418,13 @@ components:
           example: 0
           description: >
             The state of the operation
-            * `0` - Processing
+            * `0` - Processed
             * `1` - Accepted
             * `2` - Activated
             * `3` - Nonconforming
             * `4` - Contingent
             * `5` - Ended
+            * `6` - Withdrawn            
 
 
     BadRequest400ErrorResponse:
@@ -527,20 +530,19 @@ components:
              * `3` - Nonconforming
              * `4` - Contingent
              * `5` - Ended
+             * `6` - Withdrawn
 
           type: integer
         type_of_operation: 
           enum:
           - 1
           - 2
-          - 3
 
           type: integer
           description: >
             Set the type of operation
              * `1` - VLOS
              * `2` - BVLOS
-             * `3` - CREWED
             
     OperationalIntentDetails:
       description: >-
