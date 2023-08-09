@@ -3,13 +3,17 @@ openapi: '3.0.0'
 info:
   title: 'QGCS UTM Adapter API specification'
   description: |-
-    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. Join 
+    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. 
+
+    Glossary: 
+
+    `USSP`: A unmanned traffic management services provider, a company that provides UTM services.
     
     Unless otherwise specified, fields specified in a message but not declared in the API shall be ignored.
   version: '1.0.0'
 servers:
-  - url: 'https://virtserver.swaggerhub.com/cygnus2936/flight-blender/1.0.0'
-    description: 'Flight Blender API'
+  - url: 'https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Dronecode/utm-adapater/main/ussp-api/utm-adapter.yaml'
+    description: 'USSP QGCS API'
 security:
   - AuthFromPassport:
       - 'qgcs.utm_adapter.write'
@@ -48,9 +52,9 @@ paths:
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
       summary: Flight Authorization capabilities 
-      description: Retrieve the capabilities of the USS
+      description: Retrieve the capabilities of the USS for authorizing flights
       tags:
-        - flight_authorization
+        - flight-authorization
 
   /qgcs/network_remote_id/capabilities: 
     get:
@@ -70,9 +74,125 @@ paths:
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
       summary: RID capabilities 
-      description: Retrieve the capabilities of the USS
+      description: Retrieve the capabilities of the USS for network remote id
       tags:
         - network_remote_id
+
+
+  /qgcs/flight_declaration:
+    get:
+      summary: 'Get a list of all submitted flight declarations'
+      security:
+        - AuthFromPassport: [ussp.read]
+      description: "Get a list of all Flight declarations in the database, if no start or end date is provided, the USSP will provide declarations for today"
+
+      parameters:
+        - name: view
+          in: query
+          description:
+            'The area of this view: lat1,lng1,lat2,lng2.  Size may not exceed a diagonal length specified in the standard. The view is the smallest box
+            bounded by the provided corner points.'
+          schema:
+            type: string
+            example: 29.97816,31.13296,29.98025,31.13535
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: >
+            The start date for the report. Must be used together with `end_date`.
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: >
+            The end date for the report. Must be used together with `start_date`.
+      responses:
+        '200':
+          description: Get a list of declared operations, `start_date`,`end_date` and `view` parameters are optional, if they are not provided all declared operations for the past month are displayed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightDeclarationList'
+        '400':
+          description: Bad request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+        '401':
+          description: Un-authorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401ErrorResponse'
+        '403':
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard500ErrorResponse'
+      tags:
+        - flight-authorization
+    post:
+      summary: 'Add a new Flight Declaration'
+      description: "Submit a Flight Declaration into the QGCS Adapter. \
+        \ A flight declaration can be added upto 24 hours in advance as GeoJSON."
+      security:
+        - AuthFromPassport: [ussp.write]
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutFlightDeclarationRequest'
+
+      responses:
+        '200':
+          description: A flight declaration created notification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightDeclarationCreated'
+                
+        '400':
+          description: Bad request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+        '401':
+          description: Un-authorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401ErrorResponse'
+        '403':
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard500ErrorResponse'
+
+      tags:
+        - flight-authorization
+
+
                 
 components:
   securitySchemes:
@@ -93,8 +213,8 @@ components:
         clientCredentials:
           tokenUrl: 'http://id.openskies.sh/oauth/token'
           scopes:
-            qgcs.utm_adapter.write: 'Write data into UTM Adapter'
-            qgcs.utm_adapter.read: 'Read data into UTM Adapter'
+            qgcs.utm_adapter.write: 'Write data to USSP via UTM Adapter'
+            qgcs.utm_adapter.read: 'Read data from USSP via UTM Adapter'
 
   schemas: 
 
@@ -158,3 +278,422 @@ components:
           items:
             $ref: '#/components/schemas/RIDCapability'
           default: []
+   
+    PutFlightDeclarationRequest: 
+      type: object
+      properties:           
+        type_of_operation: 
+          enum:
+          - 1
+          - 2
+          type: integer
+          description: >
+            Set the activity type and the airspace
+             * `1` - VLOS
+             * `2` - BVLOS
+        submitted_by:
+          description: Email address of person submitting this declaration
+          type: string
+          format: email
+        operator_id:
+          description: Set the id of the operator operating this flight.
+          type: string
+          example: Flight 1023
+        start_datetime:
+          description: The start date and time for the flight
+          type: string
+          format: date-time
+        end_datetime:
+          description: The end date and time for the flight
+          type: string
+          format: date-time
+        flight_declaration_geo_json: 
+          $ref: '#/components/schemas/FlightDeclarationGeoJSONFeatureCollection'
+    
+    FlightDeclarationGeoJSONFeatureCollection:
+      type: object
+      properties: 
+        type:
+          type: string
+          example: "FeatureCollection"
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightDeclarationFeatureGeoJSON'
+
+    FlightDeclarationFeatureGeoJSON:
+      type: object
+      required:
+        - type
+        - geometry
+        - properties
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          $ref: '#/components/schemas/FlightDeclarationGeometryGeoJSON'
+
+        properties:
+          type: object
+          properties:
+            start_time:
+              type: string
+              format: date-time
+            end_time:
+              type: string
+              format: date-time
+            max_altitude:
+              type: object
+              properties:
+                metres:
+                  type: number
+                datum:
+                  type: string
+                  enum:
+                    - 'WGS84'
+            min_altitude:
+              type: object
+              properties:
+                metres:
+                  type: number
+                datum:
+                  type: string
+                  enum:
+                    - 'WGS84'
+          nullable: true
+        id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: integer
+
+    FlightDeclarationGeometryGeoJSON:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Polygon
+            - MultiPolygon
+
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
+            
+    Point2D:
+      type: array
+      maxItems: 2
+      minItems: 2
+      items:
+        type: number
+
+    FlightDeclarationCreated:
+      description: A flight declaration has been created
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        message:
+          type: string
+          example: 'Submitted Flight Declaration'
+        is_approved:
+          type: boolean
+          example: 1
+        state:
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4 
+          - 5
+          type: integer
+          example: 0
+          description: >
+            The state of the operation
+            * `0` - Processed
+            * `1` - Accepted
+            * `2` - Activated
+            * `3` - Nonconforming
+            * `4` - Contingent
+            * `5` - Ended
+            * `6` - Withdrawn            
+
+
+    BadRequest400ErrorResponse:
+      description: The data provided in the request is not valid
+      $ref: '#/components/schemas/Error'
+
+    Unauthorized401ErrorResponse:
+      description: The request requires an user authentication
+
+      $ref: '#/components/schemas/Error'
+
+    Forbidden403ErrorResponse:
+      description: the access is not allowed
+
+      $ref: '#/components/schemas/Error'
+      
+    Standard500ErrorResponse:
+      description: An unexpected error occured.
+      $ref: '#/components/schemas/Error'
+    
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          
+    FlightDeclarationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/FlightDeclarationDetail'
+
+        
+    FlightDeclarationDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        approved_by:
+          description: Email address of person approving this declaration
+          type: string
+          format: email
+        submitted_by:
+          description: Email address of person submitting this declaration
+          type: string
+          format: email  
+        is_approved:
+          description: Is the operation approved for flight?
+          type: string
+          format: boolean          
+          example: 1
+        start_datetime:
+          description: The start for the query
+          type: string
+          format: date-time
+        end_datetime:
+          description: The enddate for the query
+          type: string
+          format: date-time
+        flight_declaration_geojson:
+          description: The operational intent for this flight declaration as a GeoJSON FeatureCollection, a operational intent is internally used by the USSP to exchange flight plan informatin with systems like InterUSS
+          type: object
+          properties: 
+            type:
+              type: string
+              example: "FeatureCollection"
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/FlightDeclarationFeatureGeoJSON'
+        flight_declaration_raw_geojson:
+          description: The raw / original Flight Plan as GeoJSON as retrieved from QGCS
+          type: object
+          properties: 
+            type:
+              type: string
+              example: "FeatureCollection"
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/FlightDeclarationFeatureGeoJSON'
+        operational_intent:
+          description: The operational intent for this flight declaration, a raw flight plan is converted to an operational intent which can be in turn submitted to a DSS (e.g see the InterUSS project within Linux Foundation)
+          $ref: '#/components/schemas/OperationalIntentDetails'
+            
+        state:
+          enum:
+          - 0 
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          description: >
+            The state of the operation
+             * `0` - Processing
+             * `1` - Accepted
+             * `2` - Activated
+             * `3` - Nonconforming
+             * `4` - Contingent
+             * `5` - Ended
+             * `6` - Withdrawn
+
+          type: integer
+        type_of_operation: 
+          enum:
+          - 1
+          - 2
+
+          type: integer
+          description: >
+            Set the type of operation
+             * `1` - VLOS
+             * `2` - BVLOS
+            
+    OperationalIntentDetails:
+      description: >-
+        Details of a UTM operational intent. Note that this data is not stored
+        in the DSS; only with the clients.
+      type: object
+      properties:
+        volumes:
+          description: >-
+            Volumes that wholly contain the operational intent while being as
+            small as practical.
+
+            Start and end times, as well as lower and upper altitudes, are
+            required for each volume. The end time may not be in the past.
+
+            Required with at least one item when the operational intent is
+            Accepted, Activated, or Nonconforming.
+
+            May not contain any items when the operational intent is Contingent.
+          type: array
+          items:
+            $ref: '#/components/schemas/Volume4D'
+          default: []
+        off_nominal_volumes:
+          description: >-
+            Volumes that contain the anticipated area of non-conformance while
+            the aircraft is in the Nonconforming or Contingent states.
+
+            Start and end times, as well as lower and upper altitudes, are
+            required for each volume. The end time may not be in the past.
+
+            Required with at least one item when the operational intent is
+            Nonconforming or Contingent.
+
+            May not contain any items when the operational intent is Accepted or
+            Activated.
+          type: array
+          items:
+            $ref: '#/components/schemas/Volume4D'
+          default: []
+        priority:
+          $ref: '#/components/schemas/Priority'
+
+    Latitude:
+      format: double
+      description:
+        Degrees of latitude north of the equator, with reference to the
+        WGS84 ellipsoid.
+      maximum: 90
+      exclusiveMaximum: false
+      minimum: -90
+      exclusiveMinimum: false
+      type: number
+      example: 34.12
+    Longitude:
+      format: double
+      description:
+        Degrees of longitude east of the Prime Meridian, with reference
+        to the WGS84 ellipsoid.
+      maximum: 180
+      exclusiveMaximum: false
+      minimum: -180
+      exclusiveMinimum: false
+      type: number
+      example: -118.456
+    LatLngPoint:
+      description: Point on the earth's surface.
+      required:
+        - lat
+        - lng
+      type: object
+      properties:
+        lng:
+          $ref: '#/components/schemas/Longitude'
+        lat:
+          $ref: '#/components/schemas/Latitude'
+
+    Priority:
+      description: >-
+        Ordinal priority of the operational intent, as defined by the
+        regulator.  Operational intents with lesser values are lower priority
+        than all operational intents with greater values.  A lower-priority
+        operational intent may not create a conflict with a higher-priority
+        operational intent.  A higher-priority operational intent may create a
+        conflict with a lower-priority operational intent.  The regulator
+        specifies whether an operational intent may create a conflict with other
+        operational intents of the same priority.
+      type: integer
+      default: 0
+    GeoPolygon:
+      description: |-
+        An enclosed area on the earth.
+        The bounding edges of this polygon shall be the shortest paths between connected vertices.  This means, for instance, that the edge between two points both defined at a particular latitude is not generally contained at that latitude.
+        The winding order shall be interpreted as the order which produces the smaller area.
+        The path between two vertices shall be the shortest possible path between those vertices.
+        Edges may not cross.
+        Vertices may not be duplicated.  In particular, the final polygon vertex shall not be identical to the first vertex.
+      required:
+        - vertices
+      type: object
+      properties:
+        vertices:
+          minItems: 3
+          type: array
+          items:
+            $ref: '#/components/schemas/LatLngPoint'
+
+    Volume3D: # Reference https://github.com/uastech/standards/blob/master/remoteid/canonical.yaml
+      description:
+        A three-dimensional geographic volume consisting of a vertically-extruded
+        polygon.
+      required:
+        - footprint
+      type: object
+      properties:
+        footprint:
+          anyOf:
+            - $ref: '#/components/schemas/GeoPolygon'
+          description: Projection of this volume onto the earth's surface.
+        altitude_lo:
+          anyOf:
+            - $ref: '#/components/schemas/Altitude'
+          description: Minimum bounding altitude of this volume.
+        altitude_hi:
+          anyOf:
+            - $ref: '#/components/schemas/Altitude'
+          description: Maximum bounding altitude of this volume.
+
+    Altitude:
+      format: float
+      description: An altitude, in meters, above the WGS84 ellipsoid.
+      type: number
+      example: 19.5
+
+    Volume4D: # Reference https://github.com/uastech/standards/blob/master/remoteid/canonical.yaml
+      description: Contiguous block of geographic spacetime.
+      required:
+        - spatial_volume
+      type: object
+      properties:
+        spatial_volume:
+          anyOf:
+            - $ref: '#/components/schemas/Volume3D'
+          description: Constant spatial extent of this volume.
+        time_start:
+          format: date-time
+          description:
+            Beginning time of this volume.  RFC 3339 format, per OpenAPI
+            specification.
+          type: string
+        time_end:
+          format: date-time
+          description: End time of this volume.  RFC 3339 format, per OpenAPI specification.
+          type: string

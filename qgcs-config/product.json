@@ -4,6 +4,10 @@
     "utmsp_support_url": "https://utmsp.com/support",
     "utmsp_documentation_url": "https://utmsp.com/documentation",
     "base_url":"https://utmsp.com/",
+    "available_scopes": {
+        "read": "blender.read",
+        "write": "blender.write"
+    },
     "available_services": [
         {
             "flight_authorization": {
