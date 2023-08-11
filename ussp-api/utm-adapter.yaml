@@ -15,7 +15,7 @@ servers:
   - url: 'https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Dronecode/utm-adapater/main/ussp-api/utm-adapter.yaml'
     description: 'USSP QGCS API'
 security:
-  - AuthFromPassport:
+  - AuthFromOAUTH2:
       - 'qgcs.utm_adapter.write'
       - 'qgcs.utm_adapter.read'
 paths:
@@ -39,7 +39,7 @@ paths:
     put:
       summary: 'Update the state of a existing Flight Declaration'
       security:
-        - AuthFromPassport: ['qgcs.utm_adapter.write']
+        - AuthFromOAUTH2: ['qgcs.utm_adapter.write']
       description: "Use this endpoint to update the state of an operation"
       parameters:
         - in: path
@@ -98,7 +98,7 @@ paths:
   /qgcs/flight_authorization/capabilities: 
     get:
       security:
-      - AuthFromPassport:
+      - AuthFromOAUTH2:
           - 'qgcs.utm_adapter.read'
       responses:
         '200':
@@ -120,7 +120,7 @@ paths:
   /qgcs/network_remote_id/capabilities: 
     get:
       security:
-      - AuthFromPassport:
+      - AuthFromOAUTH2:
           - 'qgcs.utm_adapter.read'
       responses:
         '200':
@@ -146,7 +146,7 @@ paths:
         - network_remote_id
       summary: 'Add Telemetry observation(s)'
       security:
-        - AuthFromPassport: [qgcs.utm_adapter.write]
+        - AuthFromOAUTH2: [qgcs.utm_adapter.write]
       description:
         "Submit data that is compliant with ASTM RemoteID from the vehicle / GCS into the USSP."
       requestBody:
@@ -180,7 +180,7 @@ paths:
     get:
       summary: 'Get a list of all submitted flight declarations'
       security:
-        - AuthFromPassport: [ussp.read]
+        - AuthFromOAUTH2: [uqgcs.utm_adapter.read]
       description: "Get a list of all Flight declarations in the database, if no start or end date is provided, the USSP will provide declarations for today"
 
       parameters:
@@ -244,7 +244,7 @@ paths:
       description: "Submit a Flight Declaration into the QGCS Adapter. \
         \ A flight declaration can be added upto 24 hours in advance as GeoJSON."
       security:
-        - AuthFromPassport: [ussp.write]
+        - AuthFromOAUTH2: [qgcs.utm_adapter.write]
 
       requestBody:
         required: true
@@ -293,7 +293,7 @@ paths:
                 
 components:
   securitySchemes:
-    AuthFromPassport:
+    AuthFromOAUTH2:
       type: oauth2
       description: |-
         UTM Adapter utilizes JWT tokens issued by a OAUTH server. This can be configured as an environment varaible. In this case we recommend using / deploying a Authorization Server: e.g. Flight Passport. For more information see https://id.openskies.sh
