@@ -15,7 +15,7 @@ servers:
   - url: 'https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Dronecode/utm-adapater/main/ussp-api/utm-adapter.yaml'
     description: 'USSP QGCS API'
 security:
-  - AuthFromPassport:
+  - AuthFromOAUTH2:
       - 'qgcs.utm_adapter.write'
       - 'qgcs.utm_adapter.read'
 paths:
@@ -34,10 +34,71 @@ paths:
               schema:
                 $ref: '#/components/schemas/PongResponse'
 
+
+  /qgcs/flight_authorization/flight_declaration_state/{flight_declaration_id}:
+    put:
+      summary: 'Update the state of a existing Flight Declaration'
+      security:
+        - AuthFromOAUTH2: ['qgcs.utm_adapter.write']
+      description: "Use this endpoint to update the state of an operation"
+      parameters:
+        - in: path
+          name: flight_declaration_id
+          description: This is the ID of the flight declaration
+          schema:
+            type: string
+            format: uuid
+          required: true
+
+      requestBody:
+        description: Set the current state of the Flight Declaration
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/UpdateDeclarationState'
+                
+      responses:
+        '200':
+          description: Flight Declaration State successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightDeclarationDetail'
+        '400':
+          description: Bad request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+        '401':
+          description: Un-authorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401ErrorResponse'
+        '403':
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard500ErrorResponse'
+
+      tags:
+        - flight-authorization
+
+
+
   /qgcs/flight_authorization/capabilities: 
     get:
       security:
-      - AuthFromPassport:
+      - AuthFromOAUTH2:
           - 'qgcs.utm_adapter.read'
       responses:
         '200':
@@ -59,7 +120,7 @@ paths:
   /qgcs/network_remote_id/capabilities: 
     get:
       security:
-      - AuthFromPassport:
+      - AuthFromOAUTH2:
           - 'qgcs.utm_adapter.read'
       responses:
         '200':
@@ -79,11 +140,47 @@ paths:
         - network_remote_id
 
 
+  /qgcs/network_remote_id/set_telemetry:
+    put: 
+      tags:
+        - network_remote_id
+      summary: 'Add Telemetry observation(s)'
+      security:
+        - AuthFromOAUTH2: [qgcs.utm_adapter.write]
+      description:
+        "Submit data that is compliant with ASTM RemoteID from the vehicle / GCS into the USSP. A full ASTM compliant dataset is required to be submitted to maintain compatibility with the standard, we expect implementing USSPs to process only parts of the standard they support."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                observations:
+                  $ref: '#/components/schemas/FlightRIDData'
+
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteIDDataProcessed'
+          description: Remote ID data successfully submitted and processed.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+
+          description: |-
+            * One or more parameters were missing or invalid.
+            * The Identification Service Area information could not be parsed, or contains illegal data.
+
   /qgcs/flight_declaration:
     get:
       summary: 'Get a list of all submitted flight declarations'
       security:
-        - AuthFromPassport: [ussp.read]
+        - AuthFromOAUTH2: [uqgcs.utm_adapter.read]
       description: "Get a list of all Flight declarations in the database, if no start or end date is provided, the USSP will provide declarations for today"
 
       parameters:
@@ -147,7 +244,7 @@ paths:
       description: "Submit a Flight Declaration into the QGCS Adapter. \
         \ A flight declaration can be added upto 24 hours in advance as GeoJSON."
       security:
-        - AuthFromPassport: [ussp.write]
+        - AuthFromOAUTH2: [qgcs.utm_adapter.write]
 
       requestBody:
         required: true
@@ -196,7 +293,7 @@ paths:
                 
 components:
   securitySchemes:
-    AuthFromPassport:
+    AuthFromOAUTH2:
       type: oauth2
       description: |-
         UTM Adapter utilizes JWT tokens issued by a OAUTH server. This can be configured as an environment varaible. In this case we recommend using / deploying a Authorization Server: e.g. Flight Passport. For more information see https://id.openskies.sh
@@ -392,6 +489,35 @@ components:
       items:
         type: number
 
+    RemoteIDDataProcessed:
+      description: Remote ID data processed successfully
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'RemoteID data succesfully submitted'
+
+    UpdateDeclarationState:
+      description: A list of flight declaration states that can be manually updated
+      type: object
+      properties:
+          submitted_by:
+            type: string
+            format: email
+          state:
+            enum:
+            - 2
+            - 4
+            - 5 
+            - 7
+            type: integer
+            description: >
+              The state of the operation
+              * `2` - Activated
+              * `4` - Contingent
+              * `5` - Ended
+              * `7` - Cancelled
+
     FlightDeclarationCreated:
       description: A flight declaration has been created
       type: object
@@ -522,6 +648,9 @@ components:
           - 3
           - 4
           - 5
+          - 6
+          - 7
+          - 8
           description: >
             The state of the operation
              * `0` - Processing
@@ -531,6 +660,8 @@ components:
              * `4` - Contingent
              * `5` - Ended
              * `6` - Withdrawn
+             * `7` - Cancelled
+             * `8` - Rejected
 
           type: integer
         type_of_operation: 
@@ -697,3 +828,524 @@ components:
           format: date-time
           description: End time of this volume.  RFC 3339 format, per OpenAPI specification.
           type: string
+
+    ####################### Start of ASTM-standard definitions #######################
+
+    FlightRIDData:
+      type: array
+      items:
+        type: object
+        required:
+          - current_states
+          - flight_details
+          
+        properties:
+        
+          current_states:
+            type: array
+            items:
+              $ref: '#/components/schemas/RIDAircraftState'
+          flight_details: 
+            type: object
+            $ref: '#/components/schemas/RIDOperatorDetails'
+
+    RIDOperatorDetails:
+      description:
+        Details about a flight reported by a remote ID service provider.  At
+        least one of the registration or serial fields must be filled if required
+        by CAA.
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          description: ID for this flight, matching a existing flight declaration ID in Flight Blender in request. If the ID of does not match, Blender will reject data from this endpoint.
+          type: string
+          example: 238c0189-cdb1-43f0-8510-5718b37eeca4    
+          
+        eu_classification:
+          description: When this field is specified, the Classification Type is "European
+            Union".  If no other classification field is specified, the Classification Type
+            is "Undeclared".
+          anyOf:
+          - $ref: '#/components/schemas/UAClassificationEU'
+        uas_id:
+          $ref: '#/components/schemas/UASID'
+        operator_id:
+          description: This optional field provides a CAA-issued registration/license ID for the
+            remote pilot or operator. Format is <ICAO Nationality MarkA>.<CAA Assigned ID>, ASCII
+            encoded, only uppercase letters (A-Z), dot (.), and digits (0-9) are allowed. Example
+            is valid for the US.
+          type: string
+          default: ''
+          example: N.OP123456
+        operator_location:
+          $ref: '#/components/schemas/OperatorLocation'
+        operation_description:
+          description:
+            Free-text field that enables the operator to describe the purpose
+            of a flight, if so desired.
+          type: string
+          example:
+            SafeFlightDrone company doing survey with DJI Inspire 2. See my
+            privacy policy www.example.com/privacy.
+        auth_data:
+          $ref: '#/components/schemas/RIDAuthData'
+        serial_number:
+          description:
+            Can be specified when no registration ID exists and required
+            by law in a region. This is expressed in the ANSI/CTA-2063-A Physical Serial
+            Number format.
+          type: string
+          example: INTCJ123-4567-890
+        registration_number:
+          description:
+            If a CAA provides a method of registering UAS, this number
+            is provided by the CAA or its authorized representative.  Required when
+            required by law in a region.
+          type: string
+          example: FA12345897
+    RIDAuthData:
+      description: Additional authentication data.
+      required:
+        - format
+        - data
+      type: object
+      properties:
+        format:
+          description: Format of additional authentication data.
+          type: string
+        data:
+          description: Authentication data in form specified by `format`.
+          type: string
+    UAClassificationEU:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+          - EUCategoryUndefined
+          - Open
+          - Specific
+          - Certified
+          default: EUCategoryUndefined
+        class:
+          type: string
+          enum:
+          - EUClassUndefined
+          - Class0
+          - Class1
+          - Class2
+          - Class3
+          - Class4
+          - Class5
+          - Class6
+          default: EUClassUndefined          
+    UASID:
+      description: Identification of the UAS performing this flight.  At least one
+        field of this object must be specified.
+      type: object
+      properties:
+        serial_number:
+          description: This is expressed in the CTA-2063-A Serial Number format.
+          type: string
+          example: INTCJ123-4567-890
+          default: ''
+        registration_id:
+          description: If a CAA provides a method of registering UAS, this number
+            is provided by the CAA or its authorized representative.  Format is
+            <ICAO Nationality MarkA>.<CAA Assigned ID>, ASCII encoded, only
+            uppercase letters (A-Z), dot (.), and digits (0-9) are allowed.
+            Example is valid for the US.
+          type: string
+          example: N.123456
+          default: ''
+        utm_id:
+          description: A UTM-provided universally unique ID traceable to a
+            non-obfuscated ID that acts as a "session id" to protect exposure of
+            operationally sensitive information.
+          type: string
+          example: ae1fa066-6d68-4018-8274-af867966978e
+          default: ''
+        specific_session_id:
+          $ref: '#/components/schemas/SpecificSessionID'
+    OperatorLocation:
+      description: Location associated with the Remote Pilot
+      type: object
+      required:
+      - position
+      properties:
+        position:
+          anyOf:
+          - $ref: '#/components/schemas/LatLngPoint'
+          description: Position of the Remote Pilot.
+        altitude:
+          anyOf:
+          - $ref: '#/components/schemas/Altitude'
+          description: Provides the Operator Altitude based on WGS-84 height above ellipsoid (HAE)
+            (See Geodetic Altitude).  This value is provided in meters and must have a minimum
+            resolution of 1 m.
+        altitude_type:
+          description: Source of data for the altitude field.
+          type: string
+          enum:
+          - Takeoff
+          - Dynamic
+          - Fixed
+    SpecificSessionID:
+      description: |-
+        A unique 20 byte ID intended to identify a specific flight (session) while providing a
+        greater level of privacy to the operator. The first byte is the registered unique Specific Session ID
+        Type maintained by a registrar (see Annex A5), and the remaining 19 bytes is the Session ID per the
+        Specific Session ID Type specification.
+        Initial scheme registry entries include:
+        0 – reserved
+        1 – Internet Engineering Task Force (IETF) Drone Remote Identification Protocol (DRIP) entity ID
+        2 – IEEE 1609.2 HashedID8
+        Expressed as a hexadecimal string of the underlying data bytes.  A recipient should ignore any dashes in this value.  If fewer than 20 bytes are specified, the remaining bytes at the end are assumed to have value 0.
+      type: string
+      example: 02-a1b2c3d4e5f60708
+      default: ''          
+    URL:
+      description: Valid http or https URL.
+      type: string
+    RIDFlightsURL:
+      anyOf:
+      - $ref: '#/components/schemas/URL'
+      description: |-
+        The URL at which the remote ID flights and their details may be retrieved.  See `/flights` and `/flights/{id}/details` paths for specification of this endpoint.
+        This URL is the base flights resource.  If this URL is specified as https://example.com/flights then the flight details for a particular {id} may be obtained at the URL https://example.com/flights/{id}/details.  This URL may not have a trailing / character.
+      type: string
+      example: https://example.com/flights
+    Time:
+      required:
+        - value
+        - format
+      type: object
+      properties:
+        value:
+          type: string
+          description: >-
+            RFC3339-formatted time/date string.  The time zone must be 'Z'.
+          format: date-time
+          example: '1985-04-12T23:20:50.52Z'
+        format:
+          type: string
+          enum:
+            - RFC3339
+            
+    RIDAircraftState:
+      description: State of an aircraft for the purposes of remote ID.
+      required:
+      - timestamp
+      - timestamp_accuracy
+      - accuracy_h
+      - accuracy_v
+      - speed
+      - vertical_speed
+      - track
+      - speed_accuracy
+      - position
+      type: object
+      properties:
+        timestamp:
+          $ref: '#/components/schemas/Time'
+        timestamp_accuracy:
+          format: float
+          description: 'Declaration of timestamp accuracy, which is the largest difference
+            between Timestamp and true time of applicability for any of the following
+            fields: Latitude, Longitude, Geodetic Altitude, Pressure Altitude of Position,
+            Height. to determine time of applicability of the location data provided.  Expressed
+            in seconds, precise to 1/10ths of seconds. The accuracy reflects the 95%
+            uncertainty bound value for the timestamp.'
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        operational_status:
+          $ref: '#/components/schemas/RIDOperationalStatus'
+        position:
+          $ref: '#/components/schemas/RIDAircraftPosition'
+        track:
+          format: float
+          description: Direction of flight expressed as a "True North-based" ground
+            track angle.  This value is provided in degrees East of North with a minimum
+            resolution of 1 degree.
+          maximum: 360
+          exclusiveMaximum: true
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        speed:
+          format: float
+          description: Ground speed of flight in meters per second.
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+          example: 1.9
+        speed_accuracy:
+          anyOf:
+          - $ref: '#/components/schemas/SpeedAccuracy'
+          description: Accuracy of horizontal ground speed.
+        vertical_speed:
+          format: float
+          description: Speed up (vertically) WGS84-HAE, m/s.
+          type: number
+          example: 0.2
+        height:
+          $ref: '#/components/schemas/RIDHeight'
+        group_radius:
+          format: float
+          description: Farthest horizontal distance from reported group location at
+            which an aircraft in the group may be located (meters).  This value contains
+            the "Operating Area Radius" data from the common data dictionary when
+            group operation area is specified by point-radius.
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+        group_ceiling:
+          format: float
+          description: Maximum altitude (meters WGS84-HAE) of Group Operation.  This
+            value contains the "Operating Area Ceiling" data from the common data
+            dictionary when group operation area is specified by point-radius.
+          type: number
+        group_floor:
+          format: float
+          description: Minimum altitude (meters WGS84-HAE) of Group Operation.  If
+            not specified, ground level shall be assumed.  This value contains the
+            "Operating Area Floor" data from the common data dictionary when group
+            operation area is specified by point-radius.
+          type: number
+        group_count:
+          format: int32
+          description: When operating a group (or formation or swarm), number of aircraft
+            in group.  This value contains the "Operating Area Count" data from the
+            common data dictionary when group operation area is specified by point-radius.
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+        group_time_start:
+          format: date-time
+          description: Time at which a group operation starts.  This value contains
+            the "Operation Area Start" data from the common data dictionary when group
+            operation area is specified by point-radius.
+          type: string
+        group_time_end:
+          format: date-time
+          description: Time at which a group operation starts.  This value contains
+            the "Operation Area End" data from the common data dictionary when group
+            operation area is specified by point-radius.
+          type: string
+    RIDHeight:
+      description: A relative altitude for the purposes of remote ID.
+      required:
+      - distance
+      - reference
+      type: object
+      properties:
+        distance:
+          format: float
+          description: Distance above reference datum.  This value is provided in
+            meters and must have a minimum resolution of 1 meter.
+          type: number
+        reference:
+          description: The reference datum above which the height is reported.
+          enum:
+          - TakeoffLocation
+          - GroundLevel
+          type: string          
+    SpeedAccuracy:
+      description: |-
+        This is the same enumeration scale and values from ADS-B NACv.
+
+        `SAUnknown`: Unknown speed accuracy
+
+        `SA10mpsPlus`: > 10 m/s
+
+        `SA10mps`: < 10 m/s
+
+        `SA3mps`: < 3 m/s
+
+        `SA1mps`: < 1 m/s
+
+        `SA03mps`: < 0.3 m/s
+      enum:
+      - SAUnknown
+      - SA10mpsPlus
+      - SA10mps
+      - SA3mps
+      - SA1mps
+      - SA03mps
+      type: string
+    RIDAircraftType:
+      description: |-
+        Type of aircraft for the purposes of remote ID.
+
+        `VTOL` is a fixed wing aircraft that can take off vertically.  `Rotocraft` includes multirotor.
+      enum:
+      - NotDeclared
+      - Aeroplane
+      - Rotorcraft
+      - Gyroplane
+      - VTOL
+      - Ornithopter
+      - Glider
+      - Kite
+      - FreeBalloon
+      - CaptiveBalloon
+      - Airship
+      - FreeFallOrParachute
+      - Rocket
+      - TetheredPoweredAircraft
+      - GroundObstacle
+      - Other
+      type: string
+    RIDRecentAircraftPosition:
+      description: ""
+      required:
+      - time
+      - position
+      type: object
+      properties:
+        time:
+          format: date-time
+          description: Time at which this position applied.  RFC 3339 format, per
+            OpenAPI specification.
+          type: string
+        position:
+          $ref: '#/components/schemas/RIDAircraftPosition'
+    RIDAircraftPosition:
+      description: Position of an aircraft as reported for remote ID purposes.
+      required:
+      - lat
+      - lng
+      - alt
+      type: object
+      properties:
+        lat:
+          $ref: '#/components/schemas/Latitude'
+        lng:
+          $ref: '#/components/schemas/Longitude'
+        alt:
+          format: float
+          description: 'Geodetic altitude (NOT altitude above launch, altitude above
+            ground, or EGM96): aircraft distance above the WGS84 ellipsoid as measured
+            along a line that passes through the aircraft and is normal to the surface
+            of the WGS84 ellipsoid.  This value is provided in meters and must have
+            a minimum resolution of 1 meter.'
+          type: number
+          example: 1321.2
+        accuracy_h:
+          anyOf:
+          - $ref: '#/components/schemas/HorizontalAccuracy'
+          description: Horizontal error that is likely to be present in this reported
+            position.  Required when `extrapolated` field is true and always in the
+            entry for the current state.
+        accuracy_v:
+          anyOf:
+          - $ref: '#/components/schemas/VerticalAccuracy'
+          description: Vertical error that is likely to be present in this reported
+            position.  Required when `extrapolated` field is true and always in the
+            entry for the current state.
+        extrapolated:
+          description: True if this position was generated primarily by computation
+            rather than primarily from a direct instrument measurement.  Assumed false
+            if not specified.
+          type: boolean
+        pressure_altitude:
+          format: float
+          description: The uncorrected altitude (based on reference standard 29.92
+            inHg, 1013.25 mb) provides a reference for algorithms that utilize "altitude
+            deltas" between aircraft.  This value is provided in meters and must have
+            a minimum resolution of 1 meter.
+          type: number
+    HorizontalAccuracy:
+      description: |-
+        This is the NACp enumeration from ADS-B, plus 1m for a more complete range for UAs.
+
+        `HAUnknown`: Unknown horizontal accuracy
+
+        `HA10NMPlus`: > 10NM (18.52km)
+
+        `HA10NM`: < 10NM (18.52km)
+
+        `HA4NM`: < 4NM (7.408km)
+
+        `HA2NM`: < 2NM (3.704km)
+
+        `HA1NM`: < 1NM (1852m)
+
+        `HA05NM`: < 0.5NM (926m)
+
+        `HA03NM`: < 0.3NM (555.6m)
+
+        `HA01NM`: < 0.1NM (185.2m)
+
+        `HA005NM`: < 0.05NM (92.6m)
+
+        `HA30m`: < 30m
+
+        `HA10m`: < 10m
+
+        `HA3m`: < 3m
+
+        `HA1m`: < 1m
+      enum:
+      - HAUnknown
+      - HA10NMPlus
+      - HA10NM
+      - HA4NM
+      - HA2NM
+      - HA1NM
+      - HA05NM
+      - HA03NM
+      - HA01NM
+      - HA005NM
+      - HA30m
+      - HA10m
+      - HA3m
+      - HA1m
+      type: string
+    VerticalAccuracy:
+      description: |-
+        This is the GVA enumeration from ADS-B, plus some finer values for UAs.
+
+        `VAUnknown`: Unknown vertical accuracy
+
+        `VA150mPlus`: > 150m
+
+        `VA150m`: < 150m
+
+        `VA45m`: < 45m
+
+        `VA25m`: < 25m
+
+        `VA10m`: < 10m
+
+        `VA3m`: < 3m
+
+        `VA1m`: < 1m
+      enum:
+      - VAUnknown
+      - VA150mPlus
+      - VA150m
+      - VA45m
+      - VA25m
+      - VA10m
+      - VA3m
+      - VA1m
+      type: string
+      
+    RIDOperationalStatus:
+      description: |-
+        Operational Status indicates whether the associated UA is on the ground, airborne, or in an
+        emergency situation, or the Remote ID system has failed. The emergency status takes
+        precedence over the other status modes. This status can be used for filtering purposes.
+      enum:
+      - Undeclared
+      - Ground
+      - Airborne
+      - Emergency
+      - RemoteIDSystemFailure
+      type: string
+      default: Undeclared
+      ####################### Start of ASTM-standard definitions #######################
