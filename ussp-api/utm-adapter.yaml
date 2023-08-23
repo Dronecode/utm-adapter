@@ -148,7 +148,7 @@ paths:
       security:
         - AuthFromOAUTH2: [qgcs.utm_adapter.write]
       description:
-        "Submit data that is compliant with ASTM RemoteID from the vehicle / GCS into the USSP."
+        "Submit data that is compliant with ASTM RemoteID from the vehicle / GCS into the USSP. A full ASTM compliant dataset is required to be submitted to maintain compatibility with the standard, we expect implementing USSPs to process only parts of the standard they support."
       requestBody:
         required: true
         content:
@@ -509,15 +509,13 @@ components:
             - 2
             - 4
             - 5 
-            - 6 
             - 7
             type: integer
             description: >
               The state of the operation
               * `2` - Activated
               * `4` - Contingent
-              * `5` - Ended    
-              * `6` - Withdrawn
+              * `5` - Ended
               * `7` - Cancelled
 
     FlightDeclarationCreated:
