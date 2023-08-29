@@ -180,7 +180,7 @@ paths:
     get:
       summary: 'Get a list of all submitted flight declarations'
       security:
-        - AuthFromOAUTH2: [uqgcs.utm_adapter.read]
+        - AuthFromOAUTH2: [qgcs.utm_adapter.read]
       description: "Get a list of all Flight declarations in the database, if no start or end date is provided, the USSP will provide declarations for today"
 
       parameters:
@@ -289,6 +289,123 @@ paths:
       tags:
         - flight-authorization
 
+  /qgcs/geo_zone:
+    get:
+      summary: 'Get a list of all available GeoZones'
+      security:
+        - AuthFromOAUTH2: [qgcs.utm_adapter.read]
+      description: "Get a list of all Geozones in the database, if no start or end date is provided, the USSP will provide GeoZones for today"
+
+      parameters:
+        - name: view
+          in: query
+          description:
+            'The area of this view: lat1,lng1,lat2,lng2.  Size may not exceed a diagonal length specified in the standard. The view is the smallest box
+            bounded by the provided corner points.'
+          schema:
+            type: string
+            example: 29.97816,31.13296,29.98025,31.13535
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: >
+            The start date for the report. Must be used together with `end_date`.
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: >
+            The end date for the report. Must be used together with `start_date`.
+      responses:
+        '200':
+          description: Get a list of active GeoZones, `start_date`,`end_date` and `view` parameters are optional, if they are not provided all the active geozones for today are provided.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeoFenceGeoJSON'
+        '400':
+          description: Bad request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+        '401':
+          description: Un-authorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401ErrorResponse'
+        '403':
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard500ErrorResponse'
+      tags:
+        - geo-zone
+
+  /qgcs/traffic_information:
+    get:
+      parameters:
+        - name: view
+          in: query
+          description: 'The area of this view: lat1,lng1,lat2,lng2.  Size may not exceed a diagonal length specified in the standard.  The view is the smallest box bounded by the provided corner points.'
+          schema:
+            type: string
+            example: 29.97816,31.13296,29.98025,31.13535
+
+          required: true
+
+      summary: 'Get latest air-traffic data'
+      security:
+        - AuthFromPassport:  [qgcs.utm_adapter.read]
+      description:
+        "Using this endpoint, you can query a stream of air-traffic observations for the view port provided"
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfObservations'
+        '400':
+          description: Bad request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest400ErrorResponse'
+        '401':
+          description: Un-authorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized401ErrorResponse'
+        '403':
+          description: Forbidden request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Standard500ErrorResponse'
+      tags:
+        - air-traffic
+        
+        
 
                 
 components:
@@ -326,6 +443,183 @@ components:
           type: string
           example: Server running properly
 
+
+    GeoFenceDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        raw_geo_fence:
+          type: object
+          $ref: '#/components/schemas/GeoFenceGeoJSON'
+        upper_limit:
+          type: number
+          multipleOf: 0.01
+        lower_limit:
+          type: number
+          multipleOf: 0.01
+        name:
+          type: string
+        bounds:
+          type: string
+        altitude_ref:
+          type: number
+        start_datetime:
+          type: string
+          format: date-time
+        end_datetime:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    GeoFenceGeoJSONList:
+      type: array
+      items:
+        $ref: '#/components/schemas/GeoFenceDetails'
+
+    GeoFenceGeoJSON:
+      type: object
+      required:
+        - type
+        - features
+      properties:
+        type:
+          type: string
+          enum:
+            - FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoFenceFeatures'
+
+    GeoFenceFeatures:
+      type: object
+      required:
+        - type
+        - geometry
+        - properties
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        geometry:
+          $ref: '#/components/schemas/GeoFenceGeometryGeoJSON'
+
+        properties:
+          type: object
+          properties:
+            upper_limit:
+              type: number
+              format: float
+            lower_limit:
+              type: number
+              format: float
+
+          nullable: true
+        id:
+          oneOf:
+            - type: string
+            - type: integer
+
+    GeoFenceGeometryGeoJSON:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Polygon
+            - MultiPolygon
+
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Point2D'
+
+    ArrayOfObservations:
+      type: array
+      items:
+        type: object
+        required:
+          - lon_dd
+          - lat_dd
+          - timestamp
+          - altitude_mm
+          - icao_address
+
+        properties:
+          lon_dd:
+            type: number
+            format: float
+            example:  -7.079881271685565
+            description: Longitude in Decimal Degrees
+          altitude_mm:
+            type: number
+            format: float
+            description: Meters represented in WGS1984 Datum
+          lat_dd:
+            type: number
+            format: float
+            example: 52.816644178938816
+            description: Latitude in Decimal Degrees
+          timestamp:
+            type: integer
+            format: int64
+          icao_address:
+            type: string
+            maxLength: 24
+          source_type:
+            enum:
+            - 0
+            - 1
+            type: integer
+            description: >-
+              The type of observation data that is provided:
+              * `0` - True
+              * `1` - Fused
+          traffic_source:
+            enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            type: integer
+            description: >-
+              The source of the observation: 
+              * `0` = 1090ES
+              * `1` - UAT
+              * `2` - Multi-radar (MRT)
+              * `3` - MLAT
+              * `4` - SSR
+              * `5` - PSR
+              * `6` - Mode-S
+              * `7` - MRT
+              * `8` - SSR + PSR Fused
+              * `9` - ADS-B
+              * `10` - FLARM
+              * `11` - Network Remote-ID
+
+          metadata:
+            type: object  
+            description: An arbitrary JSON to accomodate additional metadata
 
     FlightAuthorizationCapability:
       type: string
