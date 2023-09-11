@@ -3,11 +3,11 @@ openapi: '3.0.0'
 info:
   title: 'QGCS UTM Adapter API specification'
   description: |-
-    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider provided they implement these APIs. 
+    All the Interfaces for the QGCS UTM Adapter are specified here. Using these APIs, you can enable bi-directional data exchange between QGCS and any UTM Service provider, provided they implement these APIs. For more information see the adapter specification in this repository.
 
     Glossary: 
 
-    `USSP`: A unmanned traffic management services provider, a company that provides UTM services.
+    `USSP`: A unmanned traffic management services provider, a company that provides UTM services. In many jurisdictions these are certified or regulated entities. 
     
     Unless otherwise specified, fields specified in a message but not declared in the API shall be ignored.
   version: '1.0.0'
