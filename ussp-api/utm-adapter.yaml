@@ -175,7 +175,6 @@ paths:
           description: |-
             * One or more parameters were missing or invalid.
             * The Identification Service Area information could not be parsed, or contains illegal data.
-
   /qgcs/network_remote_id/uss/flights:
     summary: Basic operation details to meet remote ID requirements.
     description: This endpoint may be polled by remote ID display providers to display
