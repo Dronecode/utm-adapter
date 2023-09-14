@@ -1,5 +1,8 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
+### September 15, 2023
+We reviewed the API and discussed the air-traffic endpoint and mandatory / optional fields. @hrishiballal to add optional fields once a PR is submitted with a list of them, we discussed a tentative list. 
+@hrishiballal to add new endpoints for Network RID display application so that QGCS can act as one. 
 
 ### August 3, 2023
 Team, today we reviewed @hrishiballal [proposed services](https://github.com/Dronecode/utm-adapater/pull/7) for Flight Authorization and Network Remote ID. Thanks to everyone who joined the call and gave feedback on the call.

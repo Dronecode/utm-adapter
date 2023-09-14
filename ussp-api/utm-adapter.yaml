@@ -137,13 +137,13 @@ paths:
       summary: RID capabilities 
       description: Retrieve the capabilities of the USS for network remote id
       tags:
-        - network_remote_id
+        - network-remote-id
 
 
   /qgcs/network_remote_id/set_telemetry:
     put: 
       tags:
-        - network_remote_id
+        - network-remote-id
       summary: 'Add Telemetry observation(s)'
       security:
         - AuthFromOAUTH2: [qgcs.utm_adapter.write]
