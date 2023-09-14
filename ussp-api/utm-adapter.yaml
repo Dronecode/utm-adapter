@@ -176,6 +176,133 @@ paths:
             * One or more parameters were missing or invalid.
             * The Identification Service Area information could not be parsed, or contains illegal data.
 
+  /qgcs/network_remote_id/uss/flights:
+    summary: Basic operation details to meet remote ID requirements.
+    description: This endpoint may be polled by remote ID display providers to display
+      basic aircraft activity near a user in real time.
+    get:
+      tags:
+      - network-remote-id
+      operationId: searchFlights
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFlightsResponse'
+          description: Flight information was successfully retrieved.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: One or more input parameters were missing or invalid.
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bearer access token was not provided in Authorization header,
+            token could not be decoded, or token was invalid.
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The access token was decoded successfully but did not include
+            a scope appropriate to this endpoint.
+        413:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The requested view rectangle was too large.
+      security:
+      - Authority:
+        - rid.display_provider
+      summary: /uss/flights
+      description: Retrieve basic flight information from a remote ID service provider
+        to meet remote ID requirements.  This endpoint will be polled by remote ID
+        display providers to display basic aircraft activity near a user in real time.  All
+        flights that have any recent positions (past [NetUasInAreaWindow] seconds)
+        inside the requested view and time frame must be returned.
+    parameters:
+    - name: view
+      description: 'The area of this view: lat1,lng1,lat2,lng2.  Size may not exceed
+        a diagonal length specified in the standard.  The view is the smallest box
+        bounded by the provided corner points.'
+      schema:
+        type: string
+        example: 29.97816,31.13296,29.98025,31.13535
+      in: query
+      required: true
+    - name: recent_positions_duration
+      description: |-
+        If specified as greater than zero, include at least the recent positions within the most recent specified duration in seconds.  Otherwise, do not include recent positions.
+
+        A display provider's first poll of this endpoint for a particular view will usually request all recent positions while follow-up polls for that same view will usually not need to request all recent positions.
+      schema:
+        type: number
+        format: float
+        minimum: 0
+        maximum: 60
+      example: 60
+      in: query
+  /qgcs/network_remote_id/uss/flights/{id}/details:
+    summary: A remote ID flight reported by a remote ID service provider.
+    get:
+      tags:
+      - network-remote-id
+      operationId: getFlightDetails
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFlightDetailsResponse'
+          description: Flight details were successfully retrieved.
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: One or more input parameters were missing or invalid.
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bearer access token was not provided in Authorization header,
+            token could not be decoded, or token was invalid.
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The access token was decoded successfully but did not include
+            a scope appropriate to this endpoint.
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The requested flight could not be found.
+      security:
+      - Authority:
+        - rid.display_provider
+      summary: /uss/flights/{id}/details
+      description: Retrieve details of a flight from a remote ID service provider
+        to meet remote ID requirements.
+    parameters:
+    - name: id
+      description: Remote ID flight ID for this flight; may be obtained in general
+        /flights query.
+      schema:
+        $ref: '#/components/schemas/RIDFlightID'
+      in: path
+      required: true
+
+
   /qgcs/flight_declaration:
     get:
       summary: 'Get a list of all submitted flight declarations'
@@ -1643,3 +1770,207 @@ components:
       type: string
       default: Undeclared
       ####################### Start of ASTM-standard definitions #######################
+
+    GetFlightsResponse:
+      description: Response to remote ID provider query for flight information in
+        an area of interest.
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          description: The remote ID service provider's timestamp for when this information
+            was current.
+          anyOf:
+          - $ref: '#/components/schemas/Time'
+        flights:
+          description: A list of all flights that have been within the requested area
+            within the remote ID retention period.  This includes flights that are
+            not currently within the requested area, but were within the requested
+            area within the remote ID retention period.  Aircraft that are not in
+            flight, and have not been in flight within the retention period, should
+            not be included in this list.
+          type: array
+          items:
+            $ref: '#/components/schemas/RIDFlight'
+          default: []
+        no_isas_present:
+          type: boolean
+          default: false
+          description: The requested view is entirely outside any remote ID service
+            provision areas (Identification Service Area volumes) this provider has.  A
+            display provider receiving this response should discontinue polling for
+            this endpoint for the view port requested until otherwise directed by
+            DSS interactions.
+    RIDFlight:
+      description: Description of a remote ID flight.
+      required:
+      - id
+      - aircraft_type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/RIDFlightID'
+        aircraft_type:
+          anyOf:
+          - $ref: '#/components/schemas/UAType'
+          description: Generic type of aircraft.
+        current_state:
+          anyOf:
+          - $ref: '#/components/schemas/RIDAircraftState'
+          description: |-
+            The most up-to-date state of the aircraft.  Required when the aircraft is
+            currently in the requested area unless no telemetry is expected during during
+            the flight and `volumes` is specified.
+
+            If current data is not being received from the UAS by the Service Provider,
+            the lack of change in this field is sufficient to indicate that current
+            data is not being received.
+
+            If the USS believes a flight is airborne and expects to receive telemetry
+            at some point during the flight but has not yet received telemetry, this
+            field should be populated with the USS's best estimate of the position
+            of the flight with appropriate accuracy indications.
+        operating_area:
+          description: |-
+            The area the aircraft is/are within.  Required, with 1 or more elements, if
+            `current_state` is not specified.  The fields `time_start` and `time_end` are
+            required.
+
+            If `current_state` is specified, this field should not be specified.
+            If `current_state` was available at any time during the flight, or is
+            expected to be available at any time during the flight, this field should
+            not be specified.
+          anyOf:
+          - $ref: '#/components/schemas/OperatingArea'
+        simulated:
+          description: If specified as true, this flight is not a physical aircraft;
+            it is just a simulation to test the system.
+          type: boolean
+          default: false
+        recent_positions:
+          description: |-
+            A short collection of recent aircraft movement, specified only when `recent_positions_duration` is greater than zero.  If `volumes` is not specified and `recent_positions_duration` is greater than zero, then this field is required.
+
+            Recent positions provided in this field must conform to requirements in the standard which generally prohibit including positions outside the requested area except transitionally when the aircraft enters or exits the requested area, and which prohibit including positions that not sufficiently recent.
+
+            Note that a UI should not draw a connective line between two consecutive position reports that both lie outside the requested area.
+          type: array
+          items:
+            $ref: '#/components/schemas/RIDRecentAircraftPosition'
+          default: []
+    RIDFlightID:
+      description: |-
+        ID, unique to a remote ID service provider, which identifies a particular flight for which the remote ID service provider is providing remote ID services.
+
+        The following characters are not allowed: \0 \t \r \n # % / : ? @ [ \ ]
+      maxLength: 255
+      minLength: 1
+      type: string
+      example: uss1.JA6kHYCcByQ-6AfU
+    
+    UAType:
+      description: |-
+        The UA Type can help infer performance, speed, and duration of flights, for example, a
+        "fixed wing" can generally fly in a forward direction only (as compared to a multi-rotor).
+        This can also help differentiate aircraft types without sharing operationally sensitive
+        information like the make and model of a particular aircraft. Make and model are
+        anticipated to become available during the Registration ID lookup process. UAS Type is also
+        useful for correlating visual observation with data received. The types were formulated
+        based on unique flight characteristics.
+
+        `HybridLift` is a fixed wing aircraft that can take off vertically.  `Helicopter` includes multirotor.
+      enum:
+      - NotDeclared
+      - Aeroplane
+      - Helicopter
+      - Gyroplane
+      - HybridLift
+      - Ornithopter
+      - Glider
+      - Kite
+      - FreeBalloon
+      - CaptiveBalloon
+      - Airship
+      - FreeFallOrParachute
+      - Rocket
+      - TetheredPoweredAircraft
+      - GroundObstacle
+      - Other
+      type: string
+      default: NotDeclared
+    OperatingArea:
+      description: Area of operation containing one or more aircraft participating in remote identification.
+      type: object
+      properties:
+        aircraft_count:
+          format: int32
+          description: Allows for operating a single UA, group, formation, or swarm. Quantity in Group.
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+        volumes:
+          description: The area where a group or Intent-Based Network Participant operation is planned or taking place.
+          type: array
+          items:
+            $ref: '#/components/schemas/OperatingArea'
+          default: []    
+    GetFlightDetailsResponse:
+      description: Response to remote ID provider query for details about a specific
+        flight.
+      required:
+      - details
+      type: object
+      properties:
+        details:
+          $ref: '#/components/schemas/RIDFlightDetails'
+
+    ErrorResponse:
+      description: Data provided when an off-nominal condition was encountered.
+      type: object
+      properties:
+        message:
+          description: Human-readable message indicating what error occurred and/or
+            why.
+          type: string
+          default: ''
+          
+    RIDFlightDetails:
+      description: Details about a flight reported by a remote ID service provider.  At
+        least one of the registration or serial fields must be filled if required
+        by CAA.
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          description: ID for this flight, matching argument in request.
+          type: string
+          example: a3423b-213401-0023
+        eu_classification:
+          description: When this field is specified, the Classification Type is "European
+            Union".  If no other classification field is specified, the Classification Type
+            is "Undeclared".
+          anyOf:
+          - $ref: '#/components/schemas/UAClassificationEU'
+        uas_id:
+          $ref: '#/components/schemas/UASID'
+        operator_id:
+          description: This optional field provides a CAA-issued registration/license ID for the
+            remote pilot or operator. Format is <ICAO Nationality MarkA>.<CAA Assigned ID>, ASCII
+            encoded, only uppercase letters (A-Z), dot (.), and digits (0-9) are allowed. Example
+            is valid for the US.
+          type: string
+          default: ''
+          example: N.OP123456
+        operator_location:
+          $ref: '#/components/schemas/OperatorLocation'
+        operation_description:
+          description: Free-text field that enables the operator to describe the purpose
+            of a flight, if so desired.
+          type: string
+          example: SafeFlightDrone company doing survey with DJI Inspire 2. See my
+            privacy policy www.example.com/privacy.
+          default: ''
+        auth_data:
+          $ref: '#/components/schemas/RIDAuthData'
