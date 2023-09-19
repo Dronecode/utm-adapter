@@ -742,7 +742,47 @@ components:
               * `9` - ADS-B
               * `10` - FLARM
               * `11` - Network Remote-ID
+          ### From ASTM RID standard 
+          speed:
+            format: float
+            description: Ground speed of flight in meters per second.  Invalid, No Value,
+              or Unknown is 255 m/s, if speed is >254.25 m/s then report 254.25 m/s.
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            example: 1.9
+            default: 
+            
+          vertical_speed:
+            format: float
+            description: Speed up (vertically) WGS84-HAE, m/s.  Invalid, No Value, or
+              Unknown is 63 m/s, if speed is >62 m/s then report 62 m/s.
+            type: number
+            example: 0.2
+            default: 63        
+          track:
+            format: float
+            description: Direction of flight expressed as a "True North-based" ground
+              track angle.  This value is provided in clockwise degrees with a minimum
+              resolution of 1 degree.  If aircraft is not moving horizontally, use the
+              "Unknown" value.  A value of 361 indicates invalid, no value, or
+              unknown.
+            maximum: 361
+            exclusiveMaximum: false
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            default: 361
 
+          operational_status:
+            $ref: '#/components/schemas/RIDOperationalStatus'
+          ### End ASTM RID standard 
+          altitude_amsl:
+            format: float
+            description: 'Altitude over mean sea level expressed in meters'
+            type: number
+            example: 1321.2
+            default: -1000
           metadata:
             type: object  
             description: An arbitrary JSON to accomodate additional metadata
