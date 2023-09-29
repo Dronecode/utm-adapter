@@ -1,5 +1,9 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
+
+### September 27, 2023
+We reviewed the operator API and the mechanism for notification: the USSP has the responsibility to notify the operators so a pull request cycle is not the best way to develop the API. We discussed the roadmap where the current focus is on Network RID and Strategic Deoncfliction and then tackle traffic management service. We discussed that RID / SCD are primarily REST based but there needs to be a new mechnaism to define the Traffic information service given its realtime nature. We will revisit it in the next meeting.
+
 ### September 15, 2023
 We reviewed the API and discussed the air-traffic endpoint and mandatory / optional fields. @hrishiballal to add optional fields once a PR is submitted with a list of them, we discussed a tentative list. 
 @hrishiballal to add new endpoints for Network RID display application so that QGCS can act as one. 
