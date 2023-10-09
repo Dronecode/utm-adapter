@@ -5,8 +5,8 @@
     "utmsp_documentation_url": "https://utmsp.com/documentation",
     "base_url":"https://utmsp.com/",
     "available_scopes": {
-        "read": "blender.read",
-        "write": "blender.write"
+        "read": "qgcs.utm_adapter.read",
+        "write": "qgcs.utm_adapter.write"
     },
     "available_services": [
         {
