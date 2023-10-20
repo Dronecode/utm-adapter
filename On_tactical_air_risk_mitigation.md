@@ -10,7 +10,10 @@ regulations of the European Union (EU) and publications of the
 European Union Aviation Safety Agency (EASA), as referenced in the
 text.
 
-Information about other legislations much appreciated.
+[EU 2019/945]: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019R0945
+[EU 2019/947]: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019R0947
+[EU 2021/664]: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021R0664
+[Easy Access Rules]: https://www.easa.europa.eu/en/document-library/easy-access-rules/easy-access-rules-unmanned-aircraft-systems-regulations-eu
 
 ## TL;DR - The very short version
 
@@ -44,16 +47,16 @@ type of their operations and the risks involved.
 
 References:
 
-- [EU 2019/947 UAS.OPEN.050 (1)]
-- [EU 2019/947 UAS.SPEC.050 (1) (a)]
-- [EU 2019/947 UAS.LUC.020 (1)]
+- [EU 2019/947] UAS.OPEN.050 (1)
+- [EU 2019/947] UAS.SPEC.050 (1) (a)
+- [EU 2019/947] UAS.LUC.020 (1)
 
 Upon receiving traffic information services (sic!), UAS operators shall take
 relevant action to avoid any collision hazard.
 
 References:
 
-- [EU 2021/664 Art. 11 No. 4]
+- [EU 2021/664] Art. 11 No. 4
 
 During a flight in the "Specific" category, in the case of autonomous
 operations, UAS operators shall ensure that during all phases of the
@@ -62,7 +65,7 @@ to remote pilots are properly allocated otherwise.
 
 References:
 
-- [EU 2019/947 UAS.SPEC.050 (1) (b)]
+- [EU 2019/947] UAS.SPEC.050 (1) (b)
 
 During a flight in the "Open" category, remote pilots shall keep their
 aircraft in sight and maintain a thorough visual scan of the airspace
@@ -73,7 +76,7 @@ environment or property.
 
 References:
 
-- [EU 2019/947 UAS.OPEN.060 (2)(b)]
+- [EU 2019/947] UAS.OPEN.060 (2)(b)
 
 During a flight in the "Specific" category, remote pilots, or
 autonomous control systems, shall avoid any risk of collision with any
@@ -83,7 +86,7 @@ property.
 
 References:
 
-- [EU 2019/947 UAS.SPEC.060 (3)(b)]
+- [EU 2019/947] UAS.SPEC.060 (3)(b)
 
 ### On the detect and avoid procedure
 
@@ -101,8 +104,7 @@ They should
 
 References:
 
-- [EAR-UAS D.5.3]
-- [EAR-UAS := Easy Access Rules for Unmanned Aircraft Systems, European Union Aviation Safety Agency, 2022-09]
+- [Easy Access Rules] D.5.3
 
 In a dedicated UTM airspace, detecting other aircraft is achieved by
 subscribing to a traffic information service.
