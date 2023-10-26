@@ -2,10 +2,11 @@
 This document captures the bi-weekly meeting notes for coordination purposes.
 
 ### October 26, 2023
-We discussed the traffic information service and the fact that there is a "real-time" aspect to the service so the discussion focused on how to best select the protocol for publishing Traffic Information data. Some actions: 
+We discussed the traffic information service and the fact that there is a "real-time" aspect to the service so the discussion focused on how to best select the protocol for publishing Traffic Information data. We discussed the best way to make the contributions to QGCS and the conversations in-person at the PX4 Summit. Some actions: 
 - @hrishiballal will create a criteria for selection in the repository
 - Kai will refactor the current [PR](https://github.com/Dronecode/utm-adapter/pull/13/files) to be added to the [spec](https://github.com/Dronecode/utm-adapter/tree/main/spec) Traffic Information interface
 - All members will review real-time protocols / technologies that can be used to share real-time safety information 
+
 
 ### September 27, 2023
 We reviewed the operator API and the mechanism for notification: the USSP has the responsibility to notify the operators so a pull request cycle is not the best way to develop the API. We discussed the roadmap where the current focus is on Network RID and Strategic Deoncfliction and then tackle traffic management service. We discussed that RID / SCD are primarily REST based but there needs to be a new mechnaism to define the Traffic information service given its realtime nature. We will revisit it in the next meeting.
