@@ -95,7 +95,14 @@ __Deliverables__:
 
 
 ## D. Interface for Traffic Information
+__Goal__: To build a way for QGCS to receive real-time traffic information, and display concerning traffic in the QGCS user interface.
+
+__Prerequisites__:
 TODO
+
+__Deliverables__:
+TODO
+
 ## E. Interface for Conformance Monitoring
 TODO
 
