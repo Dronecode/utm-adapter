@@ -97,11 +97,49 @@ __Deliverables__:
 ## D. Interface for Traffic Information
 __Goal__: To build a way for QGCS to receive real-time traffic information, and display concerning traffic in the QGCS user interface.
 
-__Prerequisites__:
-TODO
+__Prerequisites__: (for motivation see ([On tactical air risk mitigation](On_tactical_air_risk_mitigation.md))
+- Capability to determine authenticity of traffic information recceived
+- Capability to determine synchronization between QGCS and origin of traffic information
+- Capability to assess age of traffic information
+- Capability to extrapolate current position of other aircraft based on their last known positions
 
 __Deliverables__:
-TODO
+- Capability to receive real-time traffic information.
+- Capability to display concerning traffic in the GQCS user interface.
+- Capability to provide feedback about traffic information quality to UTM service provider.
+
+### Notes
+
+At the time of writing, there were no technical standards available explicitly addressing the provision of traffic information to UAS operators.
+
+There were a few technical specification that address parts of the problem.
+
+One such technical specification was [EUROCONTROL ASTERIX Cat. 21](https://www.eurocontrol.int/publication/cat021-eurocontrol-specification-surveillance-data-exchange-asterix-part-12-category-21) which addresses the binary encoding of ADS-B position reports.
+
+Another was the [MAVLINK specification](https://mavlink.io/en), which could easily be extended with a message set for ADS-B position reports, which also addresses the binary encoding of information.
+
+The above two protocols cover the presentation of information, but do not address qualities of service.
+
+__TCP deemed inappropriate. Reason:__ TCP interferes with real-time properties of information.
+
+- TCP likes to delay information before sending (s. `TCP_NODELAY`).
+
+  This imposes unwarranted delay in the reception of information.
+  
+- TCP has control flow that cannot be turned off.
+
+  The operating systems of the sender or receiver will hold information back on occasion.
+  Aircraft position reports are periodic, and the loss of individual position reports, or receiving position reports out of order, is tolerable (up to a point).
+  
+- Additional timeout mechanisms would be required. The intrinsic send timeout (90 s) and connect timeout (300 s) are not compatible with the speed of a helicopter.
+
+__WebRTC deemed inappropriate. Reason:__ WebRTC introduces unwarranted latency.
+
+- WebRTC has been designed for the transmission of audio and video streams where an initial _delay_ is desired to fill buffers before rendering the audio or video stream at the receiver side.
+
+__RTSP deemed inappropriate. Reason:__ Same as for WebRTC.
+
+__RTP deemed appropriate. Reason:__ TODO
 
 ## E. Interface for Conformance Monitoring
 TODO
