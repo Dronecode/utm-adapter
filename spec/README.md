@@ -97,7 +97,7 @@ __Deliverables__:
 ## D. Interface for Traffic Information
 __Goal__: To build a way for QGCS to receive real-time traffic information, and display concerning traffic in the QGCS user interface.
 
-__Prerequisites__: (for motivation see ([On tactical air risk mitigation](On_tactical_air_risk_mitigation.md))
+__Prerequisites__: (for motivation see [On tactical air risk mitigation](On_tactical_air_risk_mitigation.md))
 - Capability to determine authenticity of traffic information recceived
 - Capability to determine synchronization between QGCS and origin of traffic information
 - Capability to assess age of traffic information
