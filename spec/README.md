@@ -139,7 +139,7 @@ __WebRTC deemed inappropriate. Reason:__ WebRTC introduces unwarranted latency.
 
 __RTSP deemed inappropriate. Reason:__ Same as for WebRTC.
 
-__RTP deemed appropriate. Reason:__ [RTP](https://datatracker.ietf.org/doc/html/rfc3550) has been primarily designed for interactive audio and video, <q>to satisfy the needs of multi-participant multimedia conferences</q>. However, it can also be made to handle multi-party aircraft traffic information exchange.
+__RTP deemed appropriate. Reason:__ [RTP](https://datatracker.ietf.org/doc/html/rfc3550) has been primarily designed for interactive audio and video, <q>to satisfy the needs of multi-participant multimedia conferences</q>. However, it can also be made to handle multi-party aircraft traffic information exchange. Drawback: some effort required.
 
 ## E. Interface for Conformance Monitoring
 TODO
