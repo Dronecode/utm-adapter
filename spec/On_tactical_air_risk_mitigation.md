@@ -102,8 +102,7 @@ They should
 
 - detect other aircraft in the vicinity of their own aircraft;
 - decide if the other aircraft are at risk;
-- command their own aircraft to take evasive action;
-- execute evasive action;
+- if so, command their own aircraft to take evasive action; and
 - observe effectiveness of evasive action.
 
 References:
@@ -127,7 +126,7 @@ This imposes real-time constraints on the information paths from aircraft and gr
 
 This imposes clock integrity and synchronization constraints between aircraft and ground control stations.
 
-This imposes a maximum latency between aircraft and ground control stations.
+This imposes a maximum latency constraint between aircraft and ground control stations.
 
 ### Notes and recommendations
 
@@ -140,13 +139,19 @@ subscribers should use the same reference clock.
 
 **[Recommendation]** Aircraft should report position in WGS84 coordinates.
 
+**[Recommendation]** Aircraft should report own-speed only when measured independently from their position measurement;
+for example, by measuring optical flow or dynamic pressure.
+
+**[Recommendation]** Aircraft should report own-course only when measured independently from their position measurement;
+for example, by measuring the magnetic field.
+
 **[Recommendation]** UTM service providers should keep position report
 processing to the bare minimum: receive, identify concerned
 subscribers, dispatch.
 
 **[Recommendation]** UTM service providers should be able to determine
 a ballpark estimate of the distance between any two aircraft with
-very, very, very low latency. The estimate shall be such that the
+very, very, very low latency. This estimate shall be such that the
 actual distance may be greater than the estimate, but not less.
 
 **[Recommendation]** Ground control stations should be able to
@@ -157,9 +162,3 @@ a Kalman filter.
 properties.
 
 **[Note]** Using TCP may introduce unwanted latency, see [Nagle's algorithm](https://en.wikipedia.org/wiki/Nagle%27s_algorithm#Interactions_with_real-time_systems).
-
-**[Note]** Using UDP may suffer packet loss in congested networks.
-
-**[Recommendation]** Aircraft should not report own-speed as Δp/Δt.
-
-**[Recommendation]** Aircraft should not report own-course as `atan2(Δx,Δy)`.
