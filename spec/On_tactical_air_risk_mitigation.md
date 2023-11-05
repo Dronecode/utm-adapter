@@ -17,16 +17,20 @@ text.
 
 ## TL;DR - The very short version
 
-Remote pilots, or autonomous UAS control systems, are responsible for
+1. Remote pilots, or autonomous UAS control systems, are responsible for
 assessing traffic information, and deciding upon taking evasive
 action, or not.
 
-Aircraft operators are responsible for broadcasting position reports.
+2. Aircraft operators are responsible for broadcasting position reports.
 
-UTM service providers are responsible for picking up those position
+3. UTM service providers are responsible for picking up those position
 reports, and for dispatching relevant information to concerned parties
 without undue delay, while preserving the integrity of the
 information.
+
+**Caveat:**
+The above is only applicable in designated volumes of airspace.
+Points 2. and 3. do not apply in general.
 
 ## The short version
 
