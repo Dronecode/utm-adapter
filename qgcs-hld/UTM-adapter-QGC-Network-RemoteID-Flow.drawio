@@ -1,0 +1,376 @@
+<mxfile host="Electron" modified="2023-11-06T06:42:49.955Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="STENsKk7VpccuhbJanq5" version="22.0.3" type="device">
+  <diagram name="Page-1" id="A8i_rD0HxM4u0_-H8v9l">
+    <mxGraphModel dx="3054" dy="1363" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-1" value="USSPTelemetry" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="-365" y="118" width="100" height="546" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-1">
+          <mxGeometry x="45" y="440" width="10" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-3" value="USSPServiceController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="-573" y="119" width="129" height="546" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-4" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry x="59.5" y="161" width="10" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="55" y="305" as="sourcePoint" />
+            <mxPoint x="-205" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-6" value="&lt;div&gt;State transition from&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;b&gt;SendFlightPlan&lt;/b&gt; to &lt;b&gt;Approved&lt;/b&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-5">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-12" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="59.5" y="355" as="sourcePoint" />
+            <mxPoint x="-200.5" y="355" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-8" value="&lt;div&gt;State transition from&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;b&gt;Approved&lt;/b&gt; to &lt;b&gt;Activated&lt;/b&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-7">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-12" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-9" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="58" y="405" as="sourcePoint" />
+            <mxPoint x="-202" y="405" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-10" value="&lt;div&gt;State transition from&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;b&gt;Activated&lt;/b&gt; to &lt;b&gt;SendTelemetry&lt;/b&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-9">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-12" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-11" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry x="59.5" y="294" width="10" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-12" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="456.9999999999998" y="431" as="sourcePoint" />
+            <mxPoint x="-444" y="431" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-13" value="Emit Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-12">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-422" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-14" value="USSPVehicle" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="-862" y="119" width="163" height="543" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-15" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-14">
+          <mxGeometry x="75" y="293" width="10" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-16" value="USSP Toolbar" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="-1076" y="118" width="100" height="546" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-16" target="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="53" y="106" as="sourcePoint" />
+            <mxPoint x="898" y="104" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-18" value="Submit Flight Plan Button Clicked" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-17">
+          <mxGeometry x="-0.8658" y="2" relative="1" as="geometry">
+            <mxPoint x="42" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-19" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-16">
+          <mxGeometry x="45" y="90" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-20" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-16">
+          <mxGeometry x="45" y="217" width="10" height="242" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-21" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-120" y="265" as="sourcePoint" />
+            <mxPoint x="-1015" y="269" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-22" value="Emit Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-21">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-417" y="3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-23" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-114" y="293" as="sourcePoint" />
+            <mxPoint x="-503" y="293" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-24" value="Trigger&amp;nbsp; State-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-23">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-25" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-1017" y="351" as="sourcePoint" />
+            <mxPoint x="-116" y="351" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-26" value="Upload&amp;nbsp; Flight Plan" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-25">
+          <mxGeometry x="-0.8658" y="2" relative="1" as="geometry">
+            <mxPoint x="21" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-27" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-114.00000000000023" y="402" as="sourcePoint" />
+            <mxPoint x="-1015" y="402" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-28" value="Emit Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-27">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-422" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-29" value="" style="group" connectable="0" vertex="1" parent="1">
+          <mxGeometry x="57" y="119" width="323" height="553" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-30" value="" style="group" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-29">
+          <mxGeometry width="323" height="550" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-31" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-30">
+          <mxGeometry x="-29.713798977853493" y="-22.00999999999999" width="326.85178875638843" height="572.01" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-32" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rotation=90;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-30">
+          <mxGeometry x="43.74531516183986" y="-30.487864077669897" width="42.91993185689949" height="90.8883495145631" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-33" value="&lt;div&gt;USSP&lt;/div&gt;&lt;div&gt;(FB)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-30">
+          <mxGeometry x="25.31175468483816" y="-2.0145631067961176" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-34" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-30">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="258.6201022146508" y="267" as="sourcePoint" />
+            <mxPoint x="-172.7802385008518" y="271" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-35" value="Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-34">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-36" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-30">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-177.1822827938671" y="245.4615672676838" as="sourcePoint" />
+            <mxPoint x="260.8211243611584" y="241.0010957004161" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-37" value="Requesting Approval" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-36">
+          <mxGeometry x="-0.031" y="1" relative="1" as="geometry">
+            <mxPoint x="98" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-38" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-29" target="_bvY-HOa9tMMtTd_fOvo-32">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="69.33219761499149" y="531" as="sourcePoint" />
+            <mxPoint x="58.32708688245315" y="69.02912621359224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-39" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-29">
+          <mxGeometry x="63.829642248722315" y="92.85447761194028" width="11.00511073253833" height="53.64925373134328" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-40" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-29">
+          <mxGeometry x="63.829642248722315" y="443.0044776119403" width="11.00511073253833" height="53.64925373134328" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-41" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="1" source="_bvY-HOa9tMMtTd_fOvo-44" target="_bvY-HOa9tMMtTd_fOvo-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-515" y="296" as="sourcePoint" />
+            <mxPoint x="-741" y="296" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-42" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" target="_bvY-HOa9tMMtTd_fOvo-44">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-515" y="296" as="sourcePoint" />
+            <mxPoint x="-781" y="296" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-43" value="&lt;div&gt;State transition from&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;b&gt;Idle&lt;/b&gt; to &lt;b&gt;SendFlightPlan&lt;/b&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-42">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-12" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-44" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="-785.5" y="283" width="10" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-45" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.535;entryY=0.261;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-114" y="424" as="sourcePoint" />
+            <mxPoint x="-506" y="424" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-46" value="Trigger&amp;nbsp; State-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-45">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-47" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.535;entryY=0.261;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-114" y="472.57" as="sourcePoint" />
+            <mxPoint x="-506" y="472.57" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-48" value="Trigger&amp;nbsp; State-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-47">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-49" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.535;entryY=0.261;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-115" y="525" as="sourcePoint" />
+            <mxPoint x="-507" y="525" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-50" value="Trigger&amp;nbsp; State-4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-49">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-51" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-117.00000000000023" y="449" as="sourcePoint" />
+            <mxPoint x="-1018" y="449" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-52" value="Emit Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-51">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-422" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-53" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-117.00000000000023" y="496" as="sourcePoint" />
+            <mxPoint x="-1018" y="496" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-54" value="Emit Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-53">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-422" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-55" value="&lt;div align=&quot;left&quot;&gt;State-0: &lt;b&gt;Idle&lt;/b&gt;&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;State-1: &lt;b&gt;SendFlightPlan&lt;/b&gt;&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;State-2: &lt;b&gt;Approved&lt;/b&gt;.&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;State-3: &lt;b&gt;Activated&lt;/b&gt;.&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;State-4: &lt;b&gt;SendTelemetry&lt;/b&gt;&lt;br&gt;&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-450" y="680" width="150" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-56" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.535;entryY=0.261;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-323" y="616" as="sourcePoint" />
+            <mxPoint x="-773" y="616" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-57" value="Start Telemetry Streaming" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-56">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-58" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.328;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="_bvY-HOa9tMMtTd_fOvo-2" target="_bvY-HOa9tMMtTd_fOvo-40">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-309" y="575" as="sourcePoint" />
+            <mxPoint x="106" y="575" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-59" value="qgcs/network_remote_id/set_telemetry" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-58">
+          <mxGeometry x="-0.031" y="1" relative="1" as="geometry">
+            <mxPoint x="78" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-60" value="" style="group" connectable="0" vertex="1" parent="1">
+          <mxGeometry x="238" y="117" width="118.5" height="533" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-61" value="" style="group" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-60">
+          <mxGeometry width="118.5" height="38.117631761442446" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-62" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rotation=90;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-61">
+          <mxGeometry x="39.75" y="-29.385228848821082" width="39" height="87.60124826629682" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-63" value="&lt;div&gt;USSP&lt;/div&gt;&lt;div&gt;(AMQP)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-61">
+          <mxGeometry x="18" y="-2.261156117345438" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-64" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-60" source="_bvY-HOa9tMMtTd_fOvo-66" target="_bvY-HOa9tMMtTd_fOvo-62">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="65" y="533" as="sourcePoint" />
+            <mxPoint x="53" y="66.53259361997226" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-65" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-60" target="_bvY-HOa9tMMtTd_fOvo-66">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="59" y="521.8958333333334" as="sourcePoint" />
+            <mxPoint x="297" y="152.42992424242425" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="59" y="354.3238636363636" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-66" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-60">
+          <mxGeometry x="54.25" y="229.15" width="10" height="50.85" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-67" value="USSPPlanController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="-181" y="118" width="144" height="539" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-68" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="296" y="494.65" as="sourcePoint" />
+            <mxPoint x="-126" y="497.65" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-69" value="Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-68">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint x="2" y="4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-70" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="74" y="106" as="sourcePoint" />
+            <mxPoint x="299" y="104" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-71" value="Post Flight Plan" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-70">
+          <mxGeometry x="-0.031" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-72" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry x="67" y="90" width="10" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-73" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry x="67" y="226" width="10" height="212" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-74" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="78" y="321" as="sourcePoint" />
+            <mxPoint x="77" y="347" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="111" y="322" />
+              <mxPoint x="111" y="346" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-75" value="Timeout" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry x="72" y="301" width="61" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-76" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" edge="1" parent="_bvY-HOa9tMMtTd_fOvo-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="288" y="142" as="sourcePoint" />
+            <mxPoint x="77" y="145" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-77" value="Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="_bvY-HOa9tMMtTd_fOvo-76">
+          <mxGeometry x="-0.1131" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bvY-HOa9tMMtTd_fOvo-78" value="&lt;div tabindex=&quot;0&quot; role=&quot;button&quot; style=&quot;font-size: 11px;&quot;&gt;&lt;div class=&quot;sc-hHOBiw iHxTBu&quot; style=&quot;font-size: 11px;&quot;&gt;qgcs/flight_declaration&lt;/div&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="1">
+          <mxGeometry x="1.9868055445804202" y="222.03118888976678" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
