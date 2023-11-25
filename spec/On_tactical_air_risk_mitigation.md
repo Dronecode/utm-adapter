@@ -100,10 +100,10 @@ situational awareness as follows.
 
 They should
 
-- detect other aircraft in the vicinity of their own aircraft;
-- decide if the other aircraft are at risk;
+- be able to detect other aircraft in the vicinity of their own aircraft;
+- decide if any of those other aircraft are at risk;
 - if so, command their own aircraft to take evasive action; and
-- observe effectiveness of evasive action.
+- verify effectiveness of evasive action.
 
 References:
 
@@ -120,7 +120,7 @@ evasive actions must be taken, up to and beyond the point that the
 
 When deciding whether to take evasive action, remote pilots, or
 autonomous control systems, must be able to assess the age of the
-traffic information they receive.
+traffic information they receive. The older a position report is, the less likely it is that the corresponding aircraft is still near the reported position.
 
 This imposes real-time constraints on the information paths from aircraft and ground control stations.
 
