@@ -97,17 +97,93 @@ __Deliverables__:
 ## D. Interface for Traffic Information
 __Goal__: To build a way for QGCS to receive real-time traffic information, and display concerning traffic in the QGCS user interface.
 
-__Prerequisites__: (for motivation see [On tactical air risk mitigation](On_tactical_air_risk_mitigation.md))
+__Prerequisites:__ (for motivation see [On tactical air risk mitigation](On_tactical_air_risk_mitigation.md))
 - Capability to determine authenticity of traffic information received
 - Capability to determine synchronization between QGCS and origin of traffic information
 - Capability to assess age of traffic information
 - Capability to extrapolate current position of other aircraft based on their last known positions
 
-__Deliverables__:
+__Deliverables:__
 - Capability to receive real-time traffic information.
 - Capability to display concerning traffic in the GQCS user interface.
 - Capability to provide feedback about traffic information quality to UTM service provider.
 
+__Specification:__
+
+_Signaling:_
+- (OpenAPI) Ground control station requests traffic information from UTM service provider.
+- (OpenAPI) UTM service provider responds with endpoint information.
+
+_Session management:_
+- The aforementioned endpoint would be a QUIC endpoint with QUIC datagram support enabled.
+- The Ground control station establishes a QUIC connection to that endpoint, and then waits for traffic information datagrams.
+- Upon receipt of traffic information, the UTM service provides identifies concerned subscribers and dispatches the traffic information as soon as possible.
+- If no traffic is presently available, the UTM service provider shall keep the connection alive by sending datagrams with possibly bogus payload in the ecndoing of choice that will effectively keep the connection alive.
+- If no traffic is available due to faulty equipment, the UTM service provider shall indicate "service unavailable", and close the connection; i.e. send QUIC CONNECTION_CLOSE frame w/ error code 0x1d, and reason phrase "service unavailable".
+
+_Presentation:_ 
+- Traffic information is encoded in QUIC datagrams as follows.
+
+  The traffic information payload is prefixed by a 64-bit magic number that identifies the traffic information encoding in the payload section.
+
+  The following magic numbers are recognised:
+
+  Magic number|Alternative MN | Encoding
+  ---|---|---
+  0x4153544552495820 | 0x2058495245545341 | ASTERIX
+  0x4d41564c494e4b20 | 0x204b4e494c56414d | MAVLINK
+
+  QUIC DATAGRAM frame (w/o length field):
+  ```
+  +-------+-----------+
+  | 0x30  | data (..) |
+  +-------+-----------+
+  ```
+  
+  QUIC DATAGRAM frame (w/ length field):
+  ```
+  +-------+---------+-----------+
+  | 0x31  | len (i) | data (..) |
+  +-------+---------+-----------+
+  ```
+
+  Traffic information datagram frame data field (TIH: traffic information header, TI: traffic information):
+  ```
+  +----------+---------+
+  | TIH (64) | TI (..) |
+  +----------+---------+
+  ```
+
+  For the following two cases (ASTERIX, MAVLINK), specifying length in the datagram frame is optional.
+
+  ASTERIX Traffic information datagram data
+  (see [All-purpose structured EUROCONTROL surveillance information exchange](https://www.eurocontrol.int/asterix))
+  ```
+  +--------------------+------------+-------------+
+  | 0x4153544552495820 | FSPEC (..) | Fields (..) |
+  +--------------------+------------+-------------+
+  ```
+
+  Examples of ASTERIX payload
+  - Cat. 21 ADS-B Target reports
+  - Cat. 62 SDPS Track Messages
+  - Cat. 247 Version Number Exchange
+
+  MAVLINK Traffic information datagram data
+  (see [MAVLink 2 Packet Format](https://mavlink.io/en/guide/serialization.html#mavlink2_packet_format))
+  ```
+  +--------------------+------+---------+---------+---------+---------+-----------+------------+
+  | 0x4d41564c494e4b20 | 0xfd | LEN (8) | INC (8) | CMP (8) | SEQ (8) | SYSID (8) | COMPID (8) |…
+  +--------------------+------+---------+---------+---------+---------+-----------+------------+
+  +------------+--------------+------------+-----------+
+  | MSGID (24) | PAYLOAD (..) | CKSUM (16) | SIG (104) |
+  +------------+--------------+------------+-----------+
+  ```
+
+  Examples of MAVLINK (MSGID) PAYLOAD:
+  - (0x000000) HEARTBEAT (for keep-alive)
+  - (0x0000f6) ADSB_VEHICLE
+  
 ### Notes
 
 At the time of writing, there were no technical standards available explicitly addressing the provision of traffic information to UAS operators.
@@ -119,6 +195,10 @@ One such technical specification was [EUROCONTROL ASTERIX Cat. 21](https://www.e
 Another was the [MAVLINK specification](https://mavlink.io/en), which could easily be extended with a message set for ADS-B position reports, which also addresses the binary encoding of information.
 
 The above two protocols cover the presentation of information, but do not address qualities of service.
+
+__(Plain) UDP deemed inappropriate. Reason:__ 
+
+- Plain UDP does not provide security. Those features would have to be addressed independently.
 
 __TCP deemed inappropriate. Reason:__ TCP interferes with real-time properties of information.
 
@@ -133,6 +213,8 @@ __TCP deemed inappropriate. Reason:__ TCP interferes with real-time properties o
   
 - Additional timeout mechanisms would be required. The intrinsic send timeout (90 s) and connect timeout (300 s) are not compatible with the speed of a helicopter.
 
+- Plain TCP does not provide security. Those features would have to be addressed independently.
+
 __WebRTC deemed inappropriate. Reason:__ WebRTC introduces unwarranted latency.
 
 - WebRTC has been designed for the transmission of audio and video streams where an initial _delay_ is desired to fill buffers before rendering the audio or video stream at the receiver side.
@@ -140,6 +222,8 @@ __WebRTC deemed inappropriate. Reason:__ WebRTC introduces unwarranted latency.
 __RTSP deemed inappropriate. Reason:__ Same as for WebRTC.
 
 __RTP deemed appropriate. Reason:__ [RTP](https://datatracker.ietf.org/doc/html/rfc3550) has been primarily designed for interactive audio and video, <q>to satisfy the needs of multi-participant multimedia conferences</q>. However, it can also be made to handle multi-party aircraft traffic information exchange. Drawback: some effort required.
+
+__Choice: QUIC. Reason:__ QUIC is a replacement for UDP and TCP with security by design and security by default and with minor improvements over the TCP flow control mechanism.
 
 ## E. Interface for Conformance Monitoring
 TODO
