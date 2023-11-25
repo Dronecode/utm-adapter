@@ -118,7 +118,7 @@ _Session management:_
 - The aforementioned endpoint would be a QUIC endpoint with QUIC datagram support enabled.
 - The Ground control station establishes a QUIC connection to that endpoint, and then waits for traffic information datagrams.
 - Upon receipt of traffic information, the UTM service provides identifies concerned subscribers and dispatches the traffic information as soon as possible.
-- If no traffic is presently available, the UTM service provider shall keep the connection alive by sending datagrams with possibly bogus payload in the ecndoing of choice that will effectively keep the connection alive.
+- If no traffic is presently available, the UTM service provider shall keep the connection alive by sending datagrams with possibly bogus payload in the encoding of choice that will effectively keep the connection alive.
 - If no traffic is available due to faulty equipment, the UTM service provider shall indicate "service unavailable", and close the connection; i.e. send QUIC CONNECTION_CLOSE frame w/ error code 0x1d, and reason phrase "service unavailable".
 
 _Presentation:_ 
