@@ -1,6 +1,9 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+### December 21, 2023
+In the meeting we discussed the two open PRs and also the next steps re the "Mavlink on QUIC" implementation. Kai agreed to build a prototype of traffic information service and a way for QGCS to query it. We also discussed the need for QGCS to build tracks / trajectories based on traffic information. We will meet next on the 4th January. 
+
 ### November 23, 2023
 In the meeting we discussed different protocols for the traffic information service. The discussion was around if SRTP etc. are a good fit for traffic information where accuracy and timeliness is important. HTTP3 is not a good method for traffic information / QUIC is a better. SRTP/ WebRTC etc. are primarily media streaming and they do buffering in case of poor connectivity etc. , so they are not good fit. These have to be extended by custom code / developement e.g. via profiles and payload to extend the payloads to make it suitable for air-traffic information. 
 Discussion on QUIC: QUIC is secure by default (incorporates TLS v1.3), manned traffic information can be dissiminiated via RTCA-DO-260 and EuroCAE ED-102. Asterix (binary) variable length header, BEAST. 
