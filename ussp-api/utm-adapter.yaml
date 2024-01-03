@@ -107,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/FlightAuthorizationCapabilitiesResponse'
           description: >-
-            The self-declared capabilities if the UTM Service Provider as far as support for Flight Authorization (or often times called Strategic Deconfliction) is concerned. This endpoint is supports definitions and capabilities as defined in the EU U-Space regulations.
+            The self-declared capabilities if the UTM Service Provider as far as support for Flight Authorization (or often times called Strategic Deconfliction) is concerned. This endpoint is supports definitions and capabilities as defined in the EU U-Space regulations and other relevant standards e.g. ASTM F3548.
         '401':
           description: Bearer access token was not provided in Authorization header, token could not be decoded, or token was invalid.
         '403':
