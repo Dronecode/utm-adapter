@@ -11,14 +11,12 @@
     "available_services": [
         {
             "flight_declaration": {
-                "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"],
-                "request_url":"qgcs/flight_declaration"
+                "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"] 
             }
         },
         {
             "network_remote_id": {
-                "capabilties":["ASTMRID2019","ASTMRID2022"],                
-                "telemetry_submit_url":"qgcs/submit_telemetry"
+                "capabilties":["ASTMRID2019","ASTMRID2022"] 
             }
         }
     ]
