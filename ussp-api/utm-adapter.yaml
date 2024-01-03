@@ -112,7 +112,7 @@ paths:
           description: Bearer access token was not provided in Authorization header, token could not be decoded, or token was invalid.
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
-      summary: Flight Authorization capabilities 
+      summary: Flight Declaration capabilities 
       description: Retrieve the capabilities of the USS for authorizing flights
       tags:
         - flight-declaration
