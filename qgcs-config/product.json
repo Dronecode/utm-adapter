@@ -10,9 +10,9 @@
     },
     "available_services": [
         {
-            "flight_authorization": {
+            "flight_declaration": {
                 "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"],
-                "request_url":"qgcs/flight_authorization"
+                "request_url":"qgcs/flight_declaration"
             }
         },
         {

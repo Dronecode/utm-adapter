@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/PongResponse'
 
 
-  /qgcs/flight_authorization/flight_declaration_state/{flight_declaration_id}:
+  /qgcs/flight_declaration/flight_declaration_state/{flight_declaration_id}:
     put:
       summary: 'Update the state of a existing Flight Declaration'
       security:
@@ -91,11 +91,11 @@ paths:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
 
       tags:
-        - flight-authorization
+        - flight-declaration
 
 
 
-  /qgcs/flight_authorization/capabilities: 
+  /qgcs/flight_declaration/capabilities: 
     get:
       security:
       - AuthFromOAUTH2:
@@ -115,7 +115,7 @@ paths:
       summary: Flight Authorization capabilities 
       description: Retrieve the capabilities of the USS for authorizing flights
       tags:
-        - flight-authorization
+        - flight-declaration
 
   /qgcs/network_remote_id/capabilities: 
     get:
@@ -364,7 +364,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
       tags:
-        - flight-authorization
+        - flight-declaration
     post:
       summary: 'Add a new Flight Declaration'
       description: "Submit a Flight Declaration into the QGCS Adapter. \
@@ -413,7 +413,7 @@ paths:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
 
       tags:
-        - flight-authorization
+        - flight-declaration
 
   /qgcs/geo_zone:
     get:
