@@ -8,6 +8,9 @@
         "read": "qgcs.utm_adapter.read",
         "write": "qgcs.utm_adapter.write"
     },
+    "utmsp_oauth2_data": {
+        "token_url": "https://utmsp.com/oauth/token"
+    },
     "available_services": [
         {
             "flight_declaration": {
