@@ -14,12 +14,12 @@
     "available_services": [
         {
             "flight_declaration": {
-                "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"] 
+                "capabilities":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"] 
             }
         },
         {
             "network_remote_id": {
-                "capabilties":["ASTMRID2019","ASTMRID2022"] 
+                "capabilities":["ASTMRID2019","ASTMRID2022"] 
             }
         }
     ]
