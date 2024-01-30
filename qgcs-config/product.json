@@ -8,17 +8,18 @@
         "read": "qgcs.utm_adapter.read",
         "write": "qgcs.utm_adapter.write"
     },
+    "utmsp_oauth2_data": {
+        "token_url": "https://utmsp.com/oauth/token"
+    },
     "available_services": [
         {
-            "flight_authorization": {
-                "capabilties":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"],
-                "request_url":"qgcs/flight_authorization"
+            "flight_declaration": {
+                "capabilities":["FlightAuthorisationValidation","BasicStrategicConflictDetection", "HighPriorityFlights"] 
             }
         },
         {
             "network_remote_id": {
-                "capabilties":["ASTMRID2019","ASTMRID2022"],                
-                "telemetry_submit_url":"qgcs/submit_telemetry"
+                "capabilities":["ASTMRID2019","ASTMRID2022"] 
             }
         }
     ]

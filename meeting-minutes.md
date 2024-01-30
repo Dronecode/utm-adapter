@@ -1,11 +1,17 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+### January 4 2024
+In the meeting we discussed the progress in the QGCS PR and resolving some of Beat's comments. We also discussed provisioning a OpenUTM instance / reference implementation to test with the endpoints. We also discussed a proof-of-concept implementation of traffic data via Mavlink Datagrams over QUIC. 
+
+### December 21, 2023
+In the meeting we discussed the two open PRs and also the next steps re the "Mavlink on QUIC" implementation. Kai agreed to build a prototype of traffic information service and a way for QGCS to query it. We also discussed the need for QGCS to build tracks / trajectories based on traffic information. We will meet next on the 4th January. 
+
 ### November 23, 2023
-In the meeting we discussed different protocols for the traffic information service. The discussion was around if SRTP etc. are a good fit for traffic information where accuracy and timeliness is important. HTTP3 is not a good method for traffic information / QUIC is a better. SRTP/ WebRTC etc. are primarily media streaming and they do buffering in case of poor connectivity etc. , so they are not good fit. These have to be extended by custom code / developement e.g. via profiles and payload to extend the payloads to make it suitable for air-traffic information. 
-Discussion on QUIC: QUIC is secure by default (incorporates TLS v1.3), manned traffic information can be dissiminiated via RTCA-DO-260 and EuroCAE ED-102. Asterix (binary) variable length header, BEAST. 
+In the meeting we discussed different protocols for the traffic information service. The discussion was around if SRTP etc. are a good fit for traffic information where accuracy and timeliness is important. HTTP3 is not a good method for traffic information / QUIC is a better. SRTP/ WebRTC etc. are primarily media streaming and they do buffering in case of poor connectivity etc. , so they are not good fit. These have to be extended by custom code / development e.g. via profiles and payload to extend the payloads to make it suitable for air-traffic information. 
+Discussion on QUIC: QUIC is secure by default (incorporates TLS v1.3), manned traffic information can be disseminated via RTCA-DO-260 and EuroCAE ED-102. Asterix (binary) variable length header, BEAST. 
 - TODO Map Mavlink to QUIC datagrams
-    - GCS should implement the receing end 
+    - GCS should implement the receiving end 
     - USSP should implement the sending end 
 - The basic query mechanism will be something like show me flights in x mile radius 
 - Can mavlink be used with QUIC or is it linked to the UDP transport? To investigate 
@@ -65,7 +71,7 @@ Goal Discussion: The team agrees the main goal for the project is to build an op
 
 1. The scope of the adapter is the four U-Space mandatory services: Net-RID, Strategic De-confliction / Flight Authorization, Traffic Information and Geozones
 2. The optional service of Conformance monitoring is also included in scope.
-3. Integration of weather service is a strech goal, the standard for weather has been released, need to review it after the initial work is complete.
+3. Integration of weather service is a stretch goal, the standard for weather has been released, need to review it after the initial work is complete.
 4. We discussed changes to the QGCS User interface and how the work will be handled
 5. Changes to Mavlink / Mavlink protocol is outside of scope of the project at this moment. 
 

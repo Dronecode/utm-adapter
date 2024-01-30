@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/PongResponse'
 
 
-  /qgcs/flight_authorization/flight_declaration_state/{flight_declaration_id}:
+  /qgcs/flight_declaration/flight_declaration_state/{flight_declaration_id}:
     put:
       summary: 'Update the state of a existing Flight Declaration'
       security:
@@ -91,11 +91,11 @@ paths:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
 
       tags:
-        - flight-authorization
+        - flight-declaration
 
 
 
-  /qgcs/flight_authorization/capabilities: 
+  /qgcs/flight_declaration/capabilities: 
     get:
       security:
       - AuthFromOAUTH2:
@@ -107,15 +107,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/FlightAuthorizationCapabilitiesResponse'
           description: >-
-            The self-declared capabilities if the UTM Service Provider as far as support for Flight Authorization (or often times called Strategic Deconfliction) is concerned. This endpoint is supports definitions and capabilities as defined in the EU U-Space regulations.
+            The self-declared capabilities if the UTM Service Provider as far as support for Flight Authorization (or often times called Strategic Deconfliction) is concerned. This endpoint is supports definitions and capabilities as defined in the EU U-Space regulations and other relevant standards e.g. ASTM F3548.
         '401':
           description: Bearer access token was not provided in Authorization header, token could not be decoded, or token was invalid.
         '403':
           description: The access token was decoded successfully but did not include a scope appropriate to this endpoint.
-      summary: Flight Authorization capabilities 
+      summary: Flight Declaration capabilities 
       description: Retrieve the capabilities of the USS for authorizing flights
       tags:
-        - flight-authorization
+        - flight-declaration
 
   /qgcs/network_remote_id/capabilities: 
     get:
@@ -218,7 +218,7 @@ paths:
           description: The requested view rectangle was too large.
       security:
       - Authority:
-        - rid.display_provider
+        - qgcs.utm_adapter.read
       summary: /uss/flights
       description: Retrieve basic flight information from a remote ID service provider
         to meet remote ID requirements.  This endpoint will be polled by remote ID
@@ -288,7 +288,7 @@ paths:
           description: The requested flight could not be found.
       security:
       - Authority:
-        - rid.display_provider
+        - qgcs.utm_adapter.read
       summary: /uss/flights/{id}/details
       description: Retrieve details of a flight from a remote ID service provider
         to meet remote ID requirements.
@@ -364,7 +364,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
       tags:
-        - flight-authorization
+        - flight-declaration
     post:
       summary: 'Add a new Flight Declaration'
       description: "Submit a Flight Declaration into the QGCS Adapter. \
@@ -413,7 +413,7 @@ paths:
                 $ref: '#/components/schemas/Standard500ErrorResponse'
 
       tags:
-        - flight-authorization
+        - flight-declaration
 
   /qgcs/geo_zone:
     get:
@@ -848,6 +848,10 @@ components:
             Set the activity type and the airspace
              * `1` - VLOS
              * `2` - BVLOS
+        originating_party:
+          description: Provide the name of the flight declaration e.g. OpenUTM 102
+          type: string
+          format: email
         submitted_by:
           description: Email address of person submitting this declaration
           type: string
@@ -1101,29 +1105,7 @@ components:
           $ref: '#/components/schemas/OperationalIntentDetails'
             
         state:
-          enum:
-          - 0 
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          description: >
-            The state of the operation
-             * `0` - Processing
-             * `1` - Accepted
-             * `2` - Activated
-             * `3` - Nonconforming
-             * `4` - Contingent
-             * `5` - Ended
-             * `6` - Withdrawn
-             * `7` - Cancelled
-             * `8` - Rejected
-
-          type: integer
+          $ref: '#/components/schemas/FlightDeclarationStateEnum'
         type_of_operation: 
           enum:
           - 1
@@ -1176,6 +1158,30 @@ components:
           default: []
         priority:
           $ref: '#/components/schemas/Priority'
+    FlightDeclarationStateEnum:
+          type: integer
+
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          description: >
+            The state of the operation
+             * `0` - Processing
+             * `1` - Accepted
+             * `2` - Activated
+             * `3` - Nonconforming
+             * `4` - Contingent
+             * `5` - Ended
+             * `6` - Withdrawn
+             * `7` - Cancelled
+             * `8` - Rejected
 
     Latitude:
       format: double
