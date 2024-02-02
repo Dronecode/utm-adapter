@@ -540,7 +540,7 @@ components:
     AuthFromOAUTH2:
       type: oauth2
       description: |-
-        UTM Adapter utilizes JWT tokens issued by a OAUTH server. This can be configured as an environment varaible. In this case we recommend using / deploying a Authorization Server: e.g. Flight Passport. For more information see https://id.openskies.sh
+        UTM Adapter utilizes JWT tokens issued by a OAUTH server. This can be configured as an environment variable. In this case we recommend using / deploying a Authorization Server: e.g. Flight Passport. For more information see https://id.openskies.sh
 
         Authorization from, or on behalf of, an authorization authority.  This authority shall issue access tokens that are JSON Web Tokens as defined in RFC 7519, using the `RS256` algorithm for the signature, and publish to all providers the public key for verifying that signature.
         The following fields shall be included in the JWT claim for access tokens issued by this authority:
@@ -933,7 +933,7 @@ components:
       $ref: '#/components/schemas/Error'
       
     Standard500ErrorResponse:
-      description: An unexpected error occured.
+      description: An unexpected error ocurred.
       $ref: '#/components/schemas/Error'
     
     Error:
@@ -980,7 +980,7 @@ components:
           type: string
           format: date-time
         flight_declaration_geojson:
-          description: The operational intent for this flight declaration as a GeoJSON FeatureCollection, a operational intent is internally used by the USSP to exchange flight plan informatin with systems like InterUSS
+          description: The operational intent for this flight declaration as a GeoJSON FeatureCollection, a operational intent is internally used by the USSP to exchange flight plan information with systems like InterUSS
           type: object
           properties: 
             type:
