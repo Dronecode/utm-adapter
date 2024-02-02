@@ -1,6 +1,9 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+### February 1 2024
+First draft of the PR into QGCS is merged. A major part of the adapter code is in, we will have to enable and test and going forward it will be easier. Govind has a PR open in QGCS re test framework and examples. HB to add a readme and add / review the PRs. For traffic information service request and the server will give a information on how to connect to the QUIC service. Kai to provide sample air-traffic data file and Govind to update the example code in the PR. 
+
 ### January 4 2024
 In the meeting we discussed the progress in the QGCS PR and resolving some of Beat's comments. We also discussed provisioning a OpenUTM instance / reference implementation to test with the endpoints. We also discussed a proof-of-concept implementation of traffic data via Mavlink Datagrams over QUIC. 
 
@@ -26,7 +29,7 @@ We discussed the traffic information service and the fact that there is a "real-
 
 
 ### September 27, 2023
-We reviewed the operator API and the mechanism for notification: the USSP has the responsibility to notify the operators so a pull request cycle is not the best way to develop the API. We discussed the roadmap where the current focus is on Network RID and Strategic Deoncfliction and then tackle traffic management service. We discussed that RID / SCD are primarily REST based but there needs to be a new mechnaism to define the Traffic information service given its realtime nature. We will revisit it in the next meeting.
+We reviewed the operator API and the mechanism for notification: the USSP has the responsibility to notify the operators so a pull request cycle is not the best way to develop the API. We discussed the roadmap where the current focus is on Network RID and Strategic Deconfliction and then tackle traffic management service. We discussed that RID / SCD are primarily REST based but there needs to be a new mechanism to define the Traffic information service given its realtime nature. We will revisit it in the next meeting.
 
 ### September 15, 2023
 We reviewed the API and discussed the air-traffic endpoint and mandatory / optional fields. @hrishiballal to add optional fields once a PR is submitted with a list of them, we discussed a tentative list. 
