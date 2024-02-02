@@ -6,7 +6,7 @@ def main():
         json_data = file.read()
     parser = UTMSPConfigParser(json_data)
     auth_url = parser.data["utmsp_oauth2_data"]["token_url"]
-    auth_url = "https://passport.utm.dev.airoplatform.com/oauth/token/"
+    auth_url = os.getenv('AUTH_URL')
 
     print(auth_url)
     # Create an instance of UtmAdapterOAuth

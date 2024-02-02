@@ -10,14 +10,14 @@ class UtmAdapterOAuth:
         self.token_url = auth_url
         self.jwt = 'INVALID'
 
-    # Get OAuth token from UTMSP
+    # Get OAuth token from Authorization server
     def get_auth_token(self):
         data = {
             "client_id": self.client_id,
             "client_secret": self.client_secret,
             "grant_type": "client_credentials",
             "scope": "blender.write blender.read",
-            "audience": 'blender.utm.dev.airoplatform.com'
+            "audience": os.getenv('AUDIENCE')
         }
         response = requests.post(self.token_url, data=data)
         if response.ok:
