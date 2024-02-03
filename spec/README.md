@@ -118,7 +118,7 @@ _Session management:_
 - The aforementioned endpoint would be a QUIC endpoint with QUIC datagram support enabled.
 - The Ground control station establishes a QUIC connection to that endpoint, and then waits for traffic information datagrams.
 - Upon receipt of traffic information, the UTM service provides identifies concerned subscribers and dispatches the traffic information as soon as possible.
-- If no traffic is presently available, the UTM service provider shall keep the connection alive by sending datagrams with possibly bogus payload in the encoding of choice that will effectively keep the connection alive.
+- If no traffic is presently available, the UTM service provider shall keep the connection alive by sending datagrams with a payload akin to a heartbeat in the encoding of choice that will effectively keep the connection alive.
 - If no traffic is available due to faulty equipment, the UTM service provider shall indicate "service unavailable", and close the connection; i.e. send QUIC CONNECTION_CLOSE frame w/ error code 0x1d, and reason phrase "service unavailable".
 
 _Presentation:_
@@ -190,11 +190,13 @@ At the time of writing, there were no technical standards available explicitly a
 
 There were a few technical specification that address parts of the problem.
 
-One such technical specification was [EUROCONTROL ASTERIX Cat. 21](https://www.eurocontrol.int/publication/cat021-eurocontrol-specification-surveillance-data-exchange-asterix-part-12-category-21) which addresses the binary encoding of ADS-B position reports.
+One such technical specification was [EUROCONTROL ASTERIX Cat. 21](https://www.eurocontrol.int/publication/cat021-eurocontrol-specification-surveillance-data-exchange-asterix-part-12-category-21) which addresses specifically the binary encoding of ADS-B position reports.
 
-Another was the [MAVLINK specification](https://mavlink.io/en), which could easily be extended with a message set for ADS-B position reports, which also addresses the binary encoding of information.
+Another was the [MAVLINK specification](https://mavlink.io/en) which also addresses the binary encoding of information, and which in its <q>common</q> dialect has a message for ADS-B position reports.
 
-The above two protocols cover the presentation of information, but do not address qualities of service.
+The above two protocols cover the presentation of information, but do not address the required qualities of service.
+
+#### Choice of transport
 
 __(Plain) UDP deemed inappropriate. Reason:__
 
