@@ -479,7 +479,7 @@ paths:
       tags:
         - geo-zone
 
-  /traffic_information:
+  /discover_traffic_information:
     get:
       parameters:
         - name: view
@@ -491,7 +491,7 @@ paths:
 
           required: true
 
-      summary: 'Get latest air-traffic data'
+      summary: 'Get latest the url for latest air-traffic data'
       security:
         - AuthFromPassport:  [qgcs.utm_adapter.read]
       description:
