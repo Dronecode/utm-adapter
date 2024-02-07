@@ -19,7 +19,7 @@ security:
       - 'qgcs.utm_adapter.write'
       - 'qgcs.utm_adapter.read'
 paths:
-  /qgcs/ping:
+  /ping:
     get:
       summary: 'Server heartbeat operation'
 
@@ -35,7 +35,7 @@ paths:
                 $ref: '#/components/schemas/PongResponse'
 
 
-  /qgcs/flight_declaration/flight_declaration_state/{flight_declaration_id}:
+  /flight_declaration/flight_declaration_state/{flight_declaration_id}:
     put:
       summary: 'Update the state of a existing Flight Declaration'
       security:
@@ -95,7 +95,7 @@ paths:
 
 
 
-  /qgcs/flight_declaration/capabilities: 
+  /flight_declaration/capabilities: 
     get:
       security:
       - AuthFromOAUTH2:
@@ -117,7 +117,7 @@ paths:
       tags:
         - flight-declaration
 
-  /qgcs/network_remote_id/capabilities: 
+  /network_remote_id/capabilities: 
     get:
       security:
       - AuthFromOAUTH2:
@@ -140,7 +140,7 @@ paths:
         - network-remote-id
 
 
-  /qgcs/network_remote_id/set_telemetry:
+  /network_remote_id/set_telemetry:
     put: 
       tags:
         - network-remote-id
@@ -175,7 +175,7 @@ paths:
           description: |-
             * One or more parameters were missing or invalid.
             * The Identification Service Area information could not be parsed, or contains illegal data.
-  /qgcs/network_remote_id/uss/flights:
+  /network_remote_id/uss/flights:
     summary: Basic operation details to meet remote ID requirements.
     description: This endpoint may be polled by remote ID display providers to display
       basic aircraft activity near a user in real time.
@@ -247,7 +247,7 @@ paths:
         maximum: 60
       example: 60
       in: query
-  /qgcs/network_remote_id/uss/flights/{id}/details:
+  /network_remote_id/uss/flights/{id}/details:
     summary: A remote ID flight reported by a remote ID service provider.
     get:
       tags:
@@ -302,7 +302,7 @@ paths:
       required: true
 
 
-  /qgcs/flight_declaration:
+  /flight_declaration:
     get:
       summary: 'Get a list of all submitted flight declarations'
       security:
@@ -415,7 +415,7 @@ paths:
       tags:
         - flight-declaration
 
-  /qgcs/geo_zone:
+  /geo_zone:
     get:
       summary: 'Get a list of all available GeoZones'
       security:
@@ -479,7 +479,7 @@ paths:
       tags:
         - geo-zone
 
-  /qgcs/traffic_information:
+  /discover_traffic_information:
     get:
       parameters:
         - name: view
@@ -491,7 +491,7 @@ paths:
 
           required: true
 
-      summary: 'Get latest air-traffic data'
+      summary: 'Get latest the url for latest air-traffic data'
       security:
         - AuthFromPassport:  [qgcs.utm_adapter.read]
       description:
