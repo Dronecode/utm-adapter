@@ -112,7 +112,9 @@ __Specification:__
 
 _Signaling:_
 - (OpenAPI) Ground control station requests traffic information from UTM service provider.
+  The ground control station specifies the format it will accept: _mavlink_ (default) or _asterix_.
 - (OpenAPI) UTM service provider responds with endpoint information.
+  If the UTM service provider does not support the requested format, it will respond with an error (415).
 
 _Session management:_
 - The aforementioned endpoint would be a QUIC endpoint with QUIC datagram support enabled.
@@ -123,15 +125,6 @@ _Session management:_
 
 _Presentation:_
 - Traffic information is encoded in QUIC datagrams as follows.
-
-  The traffic information payload is prefixed by a 64-bit magic number that identifies the traffic information encoding in the payload section.
-
-  The following magic numbers are recognised:
-
-  Magic number|Alternative MN | Encoding
-  ---|---|---
-  0x4153544552495820 | 0x2058495245545341 | ASTERIX
-  0x4d41564c494e4b20 | 0x204b4e494c56414d | MAVLINK
 
   QUIC DATAGRAM frame (w/o length field):
   ```
@@ -147,21 +140,14 @@ _Presentation:_
   +-------+---------+-----------+
   ```
 
-  Traffic information datagram frame data field (TIH: traffic information header, TI: traffic information):
-  ```
-  +----------+---------+
-  | TIH (64) | TI (..) |
-  +----------+---------+
-  ```
-
   For the following two cases (ASTERIX, MAVLINK), specifying length in the datagram frame is optional.
 
   ASTERIX Traffic information datagram data
   (see [All-purpose structured EUROCONTROL surveillance information exchange](https://www.eurocontrol.int/asterix))
   ```
-  +--------------------+------------+-------------+
-  | 0x4153544552495820 | FSPEC (..) | Fields (..) |
-  +--------------------+------------+-------------+
+  +------------+-------------+
+  | FSPEC (..) | Fields (..) |
+  +------------+-------------+
   ```
 
   Examples of ASTERIX payload
@@ -172,9 +158,9 @@ _Presentation:_
   MAVLINK Traffic information datagram data
   (see [MAVLink 2 Packet Format](https://mavlink.io/en/guide/serialization.html#mavlink2_packet_format))
   ```
-  +--------------------+------+---------+---------+---------+---------+-----------+------------+
-  | 0x4d41564c494e4b20 | 0xfd | LEN (8) | INC (8) | CMP (8) | SEQ (8) | SYSID (8) | COMPID (8) |…
-  +--------------------+------+---------+---------+---------+---------+-----------+------------+
+  +------+---------+---------+---------+---------+-----------+------------+
+  | 0xfd | LEN (8) | INC (8) | CMP (8) | SEQ (8) | SYSID (8) | COMPID (8) |…
+  +------+---------+---------+---------+---------+-----------+------------+
   +------------+--------------+------------+-----------+
   | MSGID (24) | PAYLOAD (..) | CKSUM (16) | SIG (104) |
   +------------+--------------+------------+-----------+
