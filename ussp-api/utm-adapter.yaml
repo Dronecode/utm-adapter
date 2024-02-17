@@ -488,14 +488,21 @@ paths:
           schema:
             type: string
             example: 29.97816,31.13296,29.98025,31.13535
-
           required: true
 
-      summary: 'Get latest the url for latest air-traffic data'
+        - name: format
+          in: header
+          required: false
+          description: Requests traffic information to be delivered in this format: One of 'mavlink' or 'asterix'; default: 'mavlink'.
+          schema:
+            type: string
+            example: mavlink
+          
+      summary: 'Get the url for latest air-traffic data'
       security:
         - AuthFromPassport:  [qgcs.utm_adapter.read]
       description:
-        "Using this endpoint, you can query a stream of air-traffic observations for the view port provided"
+        "Using this endpoint, you can query a stream of air traffic position reports for the view port provided"
 
       responses:
         '200':
@@ -523,15 +530,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Forbidden403ErrorResponse'
+        '415':
+           description: Unsupported media type
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/Unsupported415ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Standard500ErrorResponse'
-      tags:
-        - crewed-traffic
-        
+                $ref: '#/components/schemas/Standard500ErrorResponse'        
         
 
                 
@@ -932,6 +942,10 @@ components:
 
       $ref: '#/components/schemas/Error'
       
+    Unsupported415ErrorResponse:
+      description: The media type is not supported.
+      $ref: '#/components/schemas/Error'
+
     Standard500ErrorResponse:
       description: An unexpected error ocurred.
       $ref: '#/components/schemas/Error'
