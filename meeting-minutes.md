@@ -1,6 +1,9 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+### February 15 2024
+In the meeting on HB and KLJ were present and we discussed the QUIC / traffic information endpoint. We discussed that the end point should have options for ASTERIX or Mavlink messages to share traffic information and USSPs can then choose the best strategy of sharing the data. 
+
 ### February 1 2024
 First draft of the PR into QGCS is merged. A major part of the adapter code is in, we will have to enable and test and going forward it will be easier. Govind has a PR open in QGCS re test framework and examples. HB to add a readme and add / review the PRs. For traffic information service request and the server will give a information on how to connect to the QUIC service. Kai to provide sample air-traffic data file and Govind to update the example code in the PR. 
 
