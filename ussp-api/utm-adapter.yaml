@@ -479,7 +479,7 @@ paths:
       tags:
         - geo-zone
 
-  /discover_traffic_information:
+  /traffic_information:
     get:
       parameters:
         - name: view
