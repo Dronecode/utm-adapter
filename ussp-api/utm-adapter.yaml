@@ -501,7 +501,7 @@ paths:
       security:
         - AuthFromPassport:  [qgcs.utm_adapter.read]
       description:
-        "Using this endpoint, you can query a stream of air traffic position reports for the view port provided"
+        "Using this endpoint, you can query a stream of air traffic position reports for the view port provided, if the format is unsupported by the USSP, a 415 status code should be provided"
 
       responses:
         '200':
