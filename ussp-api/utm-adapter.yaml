@@ -479,29 +479,92 @@ paths:
       tags:
         - geo-zone
 
-  /crewed_traffic_information:
+  /traffic_information:
     get:
       parameters:
-        - name: view
+        - name: area
           in: query
-          description: 'The area of this view: lat1,lng1,lat2,lng2.  Size may not exceed a diagonal length specified in the standard.  The view is the smallest box bounded by the provided corner points.'
+          description: >
+            Geographical area of interest.
+            
+            The area can be specified 
+            in the form of an axis aligned bounding box: `bb=lat1;lng1;lat2;lng2`; 
+            or in the form of a polygon: `p=lat1;lng1;lat2;lng2;lat3;lng3;...`;
+            or in the form of a circle: `c=lat;lng;rng`.
+
+            In all cases
+
+              `lat` denotes latitude/deg,
+              `lon` denotes longitude/deg
+              in the coordinate system of the World Geodetic System 1984 (WGS84).
+
+              Valid values for `lat` are from `-90.0` to `90.0`;
+              valid values for `lon` are from `-180.0` to `180.0`.
+
+              The server may reject requests with values outside this range.
+
+              Use of a decimal point or a decimal comma is at the client's discretion.
+
+            If the area is specified as a bounding box,
+            
+              `(lat1, lng1)` shall denote the northernmost, westernmost corner point, and
+              `(lat2, lng2)` shall denote the southernmost, easternmost corner point.  
+              
+              Neither corner point shall be a pole;                
+              nor shall the area contain a pole;
+              nor shall `(lat1,lng1)` equal `(lat2,lng2)`.
+              
+              The arc length from `(lat1,lng1)` to `(lat2,lng2)` shall not exceed a maximum specified in the standard.            
+
+            If the area is specified as a polygon,
+
+              there shall be three (3) or more pairs of `lat,lng` where each pair `(lat,lng)` denotes a polygon vertex.
+
+              The vertices of the polygon shall be specified clockwise from True North.
+
+              The polygon is assumed to be closed; i.e. the first point does not need to be repeated at the end.
+              However, the server should be tolerant about it.
+              The server should also tolerate a trailing `;Z` that would indicate a closed loop.
+
+              No two adjacent vertices shall be equal.
+
+              The polygon shall not be self-intersecting. The server may reject concave polygons.
+              
+              The longest arc length between the vertices shall not exceed a maximum specified in the standard.            
+
+            If the area is specified as a circle,
+
+              `lat,lng` shall denote the centre of the circle, and 
+              `rng` shall denote the radius of the circle in meters.
+
+              The diameter of the circle shall not exceed a maximum specified in the standard.
+
           schema:
             type: string
-            example: 29.97816,31.13296,29.98025,31.13535
+            examples: 
+            - bb=29.97816;31.13296;29.98025;31.13535
+            - bb=29,97816;31,13296;29,98025;31,13535
+            - p=29.97816;31.13296;29.97816;31.13535;29.98025;31.13535;29.98025;31.13296
+            - p=29.97816;31.13296;29.97816;31.13535;29.98025;31.13535;29.98025;31.13296;29.97816;31.13296
+            - p=29.97816;31.13296;29.97816;31.13535;29.98025;31.13535;29.98025;31.13296;Z
+            - c=29.97816;31.13296;6482.0
+
           required: true
+          
         - name: format
           in: query
-          description: Requests traffic information to be delivered in this format One of "asterix" or "asterix" default "mavlink"
+          description: 'Requests traffic information to be delivered in this format: one of "mavlink" or "asterix"; default "mavlink".'
           schema:
             type: string
             example: mavlink
           required: false
           
-      summary: 'Get the url for latest air-traffic data'
+      summary: 'Get the url for traffic information'
       security:
         - AuthFromPassport:  [qgcs.utm_adapter.read]
-      description:
-        "Using this endpoint, you can query a stream of air traffic position reports for the view port provided, if the format is unsupported by the USSP, a 415 status code should be provided"
+      description: >
+        Using this endpoint, you can request air traffic position reports for the specified geographical area.
+        If the format is unsupported, status code 415 should be provided.
 
       responses:
         '200':
