@@ -13,49 +13,52 @@ class utm_traffic_info:
         self.last_system_time = float("-inf")
 
     def parse(self, message):
-        msgid = message.get_msgId()
-        if msgid == mavutil.mavlink.MAVLINK_MSG_ID_SYSTEM_TIME:
-            unix_time_usec = message.time_unix_usec
-            self.last_system_time = unix_time_usec * 1E-6
-        elif msgid == mavutil.mavlink.MAVLINK_MSG_ID_ADSB_VEHICLE:
-            fields = ["time: {:.3f}".format(self.last_system_time)]
-            icao_address = message.get_field("ICAO_address")
-            fields.append("#{:06X}".format(icao_address))
-            flags = message.get_field("flags")
-            fields.append("flags: {:08b}".format(flags))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VALID_COORDS:
-                lat = message.get_field("lat")
-                lon = message.get_field("lon")
-                fields.append("lat: {:.6f}".format(lat * 1E-7))
-                fields.append("lon: {:.6f}".format(lon * 1E-7))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VALID_ALTITUDE:
-                alt = message.get_field("altitude")
-                fields.append("alt: {:.1f}".format(alt * 1E-3 / 0.3048))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VALID_HEADING:
-                crs = message.get_field("heading")
-                fields.append("crs: {:.0f}".format(crs * 1E-2))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VALID_VELOCITY:
-                spd = message.get_field("hor_velocity")
-                fields.append("spd: {:.1f}".format(spd * 36 / 1852))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VALID_CALLSIGN:
-                call_sign = message.get_field("callsign")
-                fields.append("c/s: {}".format(call_sign))
-            if flags & mavutil.mavlink.ADSB_FLAGS_VERTICAL_VELOCITY_VALID:
-                rcd = message.get_field("ver_velocity")
-                fields.append("rcd: {:.3f}".format(rcd * 6 / 3.048))
-            print(fields)
+        try:
+            if isinstance(message, mavutil.mavlink.MAVLink_adsb_vehicle_message):
+                self.parse_adsb_vehicle_message(message)
+            elif isinstance(message, mavutil.mavlink.MAVLink_system_time_message):
+                self.parse_system_time_message(message)
+            else:
+                print("Received unknown message type:", type(message))
+        except Exception as e:
+            print(f"Error while parsing message: {e}")
+
+    def parse_adsb_vehicle_message(self, message):
+        print("ADSB_VEHICLE:")
+        print(f"ICAO_address: {message.ICAO_address}")
+        print(f"lat: {message.lat}")
+        print(f"lon: {message.lon}")
+        print(f"altitude_type: {message.altitude_type}")
+        print(f"altitude: {message.altitude}")
+        print(f"heading: {message.heading}")
+        print(f"hor_velocity: {message.hor_velocity}")
+        print(f"ver_velocity: {message.ver_velocity}")
+        print(f"callsign: {message.callsign}")
+        print(f"emitter_type: {message.emitter_type}")
+        print(f"tslc: {message.tslc}")
+        print(f"flags: {message.flags}")
+        print(f"squawk: {message.squawk}")
+        print()
+
+    def parse_system_time_message(self, message):
+        print("SYSTEM_TIME:")
+        print(f"time_unix_usec: {message.time_unix_usec}")
+        print(f"time_boot_ms: {message.time_boot_ms}")
+        self.last_system_time = message.time_unix_usec * 1E-6
+        print()
 
 def main():
-    parser = argparse.ArgumentParser(description='utm-adapter traffic info strean file')
+    parser = argparse.ArgumentParser(description='utm-adapter traffic info stream file')
     parser.add_argument('inputFile', type=str, help='Input file')
     args = parser.parse_args()
 
     traffic_info = utm_traffic_info()
 
     try:
-        mlog = mavutil.mavlink_connection(args.inputFile)
+        mlog = mavutil.mavlink_connection(args.inputFile, notimestamps=True)
     except Exception as e:
-        raise Error(f'Error opening {args.inputFile}: {e}')
+        print(f'Error: {e}')
+        exit()
 
     while True:
         try:
