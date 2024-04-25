@@ -11,50 +11,84 @@ from aioquic.asyncio.protocol import QuicConnectionProtocol
 from aioquic.quic.configuration import QuicConfiguration
 from aioquic.quic.events import QuicEvent, StreamDataReceived
 from aioquic.quic.logger import QuicFileLogger
+from pymavlink import mavutil
 
 logger = logging.getLogger("client")
 MAVLINK_MSG_ID_HEARTBEAT = 0
 
-class MavlinkClientProtocol(QuicConnectionProtocol):
+class utm_traffic_info(QuicConnectionProtocol):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._heartbeat_waiter: Optional[asyncio.Future[bytes]] = None
+        self.last_system_time = float("-inf")
+        self.should_exit = False  # Flag to indicate whether to exit
 
-    async def receive_heartbeat(self) -> bytes:
+    def parse(self, message):
+        try:
+            if isinstance(message, mavutil.mavlink.MAVLink_adsb_vehicle_message):
+                self.parse_adsb_vehicle_message(message)
+            elif isinstance(message, mavutil.mavlink.MAVLink_system_time_message):
+                self.parse_system_time_message(message)
+            else:
+                print("Received unknown message type:", type(message))
+        except Exception as e:
+            print(f"Error while parsing message: {e}")
+
+    def parse_adsb_vehicle_message(self, message):
+        print("ADSB_VEHICLE:")
+        print(f"ICAO_address: {message.ICAO_address}")
+        print(f"lat: {message.lat}")
+        print(f"lon: {message.lon}")
+        print(f"altitude_type: {message.altitude_type}")
+        print(f"altitude: {message.altitude}")
+        print(f"heading: {message.heading}")
+        print(f"hor_velocity: {message.hor_velocity}")
+        print(f"ver_velocity: {message.ver_velocity}")
+        print(f"callsign: {message.callsign}")
+        print(f"emitter_type: {message.emitter_type}")
+        print(f"tslc: {message.tslc}")
+        print(f"flags: {message.flags}")
+        print(f"squawk: {message.squawk}")
+        print()
+
+    def parse_system_time_message(self, message):
+        print("SYSTEM_TIME:")
+        print(f"time_unix_usec: {message.time_unix_usec}")
+        print(f"time_boot_ms: {message.time_boot_ms}")
+        self.last_system_time = message.time_unix_usec * 1E-6
+        print()
+
+    async def receive_trafficinfo(self) -> bytes:
+        waiter = self._loop.create_future()
+        self._heartbeat_waiter = waiter
+        return await asyncio.shield(waiter)
+
+    async def send_start_message(self) -> None:
         payload = struct.pack("<BBBBI", 0, 0, 0, 0, 0)  # Additional fields for heartbeat
         struct.pack("<B", MAVLINK_MSG_ID_HEARTBEAT) + payload
         stream_id = self._quic.get_next_available_stream_id()
         self._quic.send_stream_data(stream_id, payload, end_stream=True)
-        waiter = self._loop.create_future()
-        self._heartbeat_waiter = waiter
         self.transmit()
-        return await asyncio.shield(waiter)
-
 
     def quic_event_received(self, event: QuicEvent) -> None:
         if self._heartbeat_waiter is not None:
             if isinstance(event, StreamDataReceived):
-                # Parse MAVLink message
-                length = struct.unpack("!B", bytes(event.data[:1]))[0]
-                mavlink_message = event.data[1:1 + length]
-
-                # Return MAVLink message
+                msg = event.data.decode()
+                print("Received data:", msg, end="\n")
+                self.parse(msg)
                 waiter = self._heartbeat_waiter
                 self._heartbeat_waiter = None
-                waiter.set_result(mavlink_message)
+                waiter.set_result(msg)
 
-
+                if self.should_exit:
+                    self._quic.close()
+                    asyncio.get_event_loop().stop()
 
 def save_session_ticket(ticket):
-    """
-    Callback which is invoked by the TLS engine when a new session ticket
-    is received.
-    """
     logger.info("New session ticket received")
     if args.session_ticket:
         with open(args.session_ticket, "wb") as fp:
             pickle.dump(ticket, fp)
-
 
 async def main(
     configuration: QuicConfiguration,
@@ -67,12 +101,20 @@ async def main(
         port,
         configuration=configuration,
         session_ticket_handler=save_session_ticket,
-        create_protocol=MavlinkClientProtocol,
+        create_protocol=utm_traffic_info,
     ) as client:
-        client = cast(MavlinkClientProtocol, client)
+        client = cast(utm_traffic_info, client)
         logger.debug("Sending traffic info start msg")
-        answer = await client.receive_heartbeat()
+        await client.send_start_message()
+        answer = await client.receive_trafficinfo()
         logger.info("Received traffic info msg\n%s" % answer)
+
+        try:
+            while not client.should_exit:
+                await asyncio.sleep(1)
+        except KeyboardInterrupt:
+            print("Ctrl+C detected. Initiating graceful exit.")
+            client.should_exit = True
 
 
 if __name__ == "__main__":
@@ -150,3 +192,4 @@ if __name__ == "__main__":
             port=args.port,
         )
     )
+
