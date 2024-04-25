@@ -9,33 +9,54 @@ from aioquic.quic.configuration import QuicConfiguration
 from aioquic.quic.events import QuicEvent, StreamDataReceived
 from aioquic.quic.logger import QuicFileLogger
 from aioquic.tls import SessionTicket
-from aioquic.quic.logger import QuicFileLogger
+from pymavlink import mavutil
+import datetime
 
 logger = logging.getLogger("server")
 
 # Define MAVLink message IDs
 MAVLINK_MSG_ID_HEARTBEAT = 0
 
-class MavlinkHeartbeat:
+utc_date_formatter = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+class utm_traffic_info:
     def __init__(self, system_id: int, component_id: int):
         self.system_id = system_id
         self.component_id = component_id
-
-    def pack(self) -> bytes:
-        payload = struct.pack("<BBBBI", 0, 1, 2, 3, 4)  # Placeholer for ADSB data
-        return struct.pack("<B", MAVLINK_MSG_ID_HEARTBEAT) + payload
-
+        self.last_system_time = float("-inf")
 
 class DnsServerProtocol(QuicConnectionProtocol):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.args = kwargs.get('args')
+        self.sent_message = False  # Flag to track if a message has been sent
+
     def quic_event_received(self, event: QuicEvent):
+        args = self.args
         if isinstance(event, StreamDataReceived):
+            if not self.sent_message:  # Check if a message has been sent
+                traffic_info = utm_traffic_info(system_id=1, component_id=1)
 
-            heartbeat = MavlinkHeartbeat(system_id=1, component_id=1)
-            heartbeat_data = heartbeat.pack()
-            logger.info("Send traffic info")
-            # send answer
-            self._quic.send_stream_data(event.stream_id, heartbeat_data, end_stream=True)
+                try:
+                    # mlog = mavutil.mavlink_connection(args.input_file, notimestamps=True)
+                    mlog = mavutil.mavlink_connection("/home/govind/work/utm/utm_adapter_push/utm-adapter/examples/testdata/trafficsamples/singleHelicopterMakingUturn/traffic", notimestamps=True)
+                except Exception as e:
+                    print(f'Error: {e}')
+                    exit()
 
+                try:
+                    while True:
+                        msg = mlog.recv_msg()
+                        if msg is None:
+                            break
+                        logger.info("Send traffic info")
+                        msg_str = str(msg)
+                        payload = msg_str.encode()
+                        self._quic.send_stream_data(event.stream_id, payload)
+                    self.sent_message = True  # Set the flag to indicate message sent
+                finally:
+                    mlog.close()  # Close the MAVLink connection after sending messages
+                    self._quic.send_stream_data(event.stream_id, b'', end_stream=True)  # Close the stream
 
 class SessionTicketStore:
     """
@@ -63,7 +84,7 @@ async def main(
         host,
         port,
         configuration=configuration,
-        create_protocol=DnsServerProtocol,
+        create_protocol=lambda *args, **kwargs: DnsServerProtocol(*args, **kwargs),
         session_ticket_fetcher=session_ticket_store.pop,
         session_ticket_handler=session_ticket_store.add,
         retry=retry,
@@ -110,6 +131,12 @@ if __name__ == "__main__":
         help="log QUIC events to QLOG files in the specified directory",
     )
     parser.add_argument(
+        "-input-file",
+        "--input-file",
+        type=str,
+        help="input file for traffic info",
+    )
+    parser.add_argument(
         "-v", "--verbose", action="store_true", help="increase logging verbosity"
     )
 
@@ -143,3 +170,4 @@ if __name__ == "__main__":
         )
     except KeyboardInterrupt:
         pass
+
