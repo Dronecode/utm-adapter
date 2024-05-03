@@ -385,7 +385,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FlightDeclarationCreated'
+                $ref: '#/components/schemas/FlightDeclarationCreationResponse'
                 
         '400':
           description: Bad request submitted
@@ -895,7 +895,7 @@ components:
               * `5` - Ended
               * `7` - Cancelled
 
-    FlightDeclarationCreated:
+    FlightDeclarationCreationResponse:
       description: A flight declaration has been created
       type: object
       properties:
@@ -917,6 +917,7 @@ components:
           - 3
           - 4 
           - 5
+          - 8
           type: integer
           example: 0
           description: >
@@ -927,8 +928,8 @@ components:
             * `3` - Nonconforming
             * `4` - Contingent
             * `5` - Ended
-            * `6` - Withdrawn            
-
+            * `8` - Rejected
+            
 
     BadRequest400ErrorResponse:
       description: The data provided in the request is not valid
