@@ -1,6 +1,9 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
 
+## May 9 2024
+A few new people joined the call. We did introductions and briefed on the latest. We discussed the current state of the project and the ancillary projects. A quick discussion about the QUIC implementation and the state of the PRs. 
+
 ### February 29 2024
 We talked about EuroCAE membership and KLJ's company joining the organization to take some of this work forward in EuroCAE. A round table of updates from the participants. We decided to focus the energies on testing the current implementation / services and focus on geo-zones, weather / conformance monitoring services in April.
 
