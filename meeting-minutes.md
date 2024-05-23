@@ -1,5 +1,7 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
+## May 23 2024
+We discussed standardization of this work and potential organizations. We discussed in detail the challenges and the potential interest of different organizations in developing a standard around the UTM Adapter. 
 
 ## May 9 2024
 A few new people joined the call. We did introductions and briefed on the latest. We discussed the current state of the project and the ancillary projects. A quick discussion about the QUIC implementation and the state of the PRs. 
