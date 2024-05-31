@@ -38,8 +38,7 @@ class DnsServerProtocol(QuicConnectionProtocol):
                 traffic_info = utm_traffic_info(system_id=1, component_id=1)
 
                 try:
-                    # mlog = mavutil.mavlink_connection(args.input_file, notimestamps=True)
-                    mlog = mavutil.mavlink_connection("/home/govind/work/utm/utm_adapter_push/utm-adapter/examples/testdata/trafficsamples/singleHelicopterMakingUturn/traffic", notimestamps=True)
+                    mlog = mavutil.mavlink_connection("../../examples/testdata/trafficsamples/singleHelicopterMakingUturn/traffic", notimestamps=True)
                 except Exception as e:
                     print(f'Error: {e}')
                     exit()
