@@ -1,5 +1,8 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
+## June 6 2024
+We were joined by Bob and Shameek and others. Gave a overview of the scope of the project and the next steps. Discussed he different services and the choice to use QUIC for traffic information. 
+
 ## May 23 2024
 We discussed standardization of this work and potential organizations. We discussed in detail the challenges and the potential interest of different organizations in developing a standard around the UTM Adapter. 
 
