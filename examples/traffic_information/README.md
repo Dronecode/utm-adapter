@@ -1,6 +1,6 @@
 ## Traffic Information client and server
 
-A simple implementation of the traffic information server that uses QUIC and Mavlink messages. 
+A simple implementation of the traffic information server that uses QUIC and Mavlink messages to share and read traffic information. The server can be used with your UTM implementation to enable compliance with the UTM adapter. QGCS can read and parse . 
 
 Client: `python3 client.py --ca-certs certs/pycacert.pem --port 8053`
 
