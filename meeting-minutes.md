@@ -1,5 +1,7 @@
 # Meeting Minutes
 This document captures the bi-weekly meeting notes for coordination purposes.
+## July 4 2024
+Talked about adding trajectory information as a new message type to Broadcast RID in ASTM. Added types of trajectory messages and the message format: basic message, location message.
 ## June 6 2024
 We were joined by Bob and Shameek and others. Gave a overview of the scope of the project and the next steps. Discussed he different services and the choice to use QUIC for traffic information. 
 
